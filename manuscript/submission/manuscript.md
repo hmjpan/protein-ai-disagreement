@@ -4,7 +4,7 @@
 
 Protein AI models -- evolutionary (MSA), single-sequence language, and structure-conditioned predictors -- are usually treated as competing estimators of mutation effect. Here we ask what it means, biologically, when they disagree. Using 696,311 single missense substitutions across 217 deep-mutational scanning assays (ProteinGym v1.3) scored by 40 architecturally diverse zero-shot models, we show that disagreement contains reproducible biological structure: it tracks AlphaFold structural confidence.
 
-Within proteins, evolution-vs-structure disagreement decreases monotonically with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to four disagreement definitions, multivariable adjustment, and panel resampling; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls argue against an input-quality artifact: ESM-IF1 rescoring on experimental structures (64 assays) runs opposite to that explanation, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend. Curated disorder marks a related but distinct regime: total, not pair-specific, disagreement is elevated there and single-sequence models lose relative advantage. Disagreement regimes, discrete summaries of a continuous geometry, generalize to held-out proteins (frozen-centroid protein-level cross-validation: median Spearman 0.94; 100% of 185 positive) and replicate across independent assays (median 0.94; 37 pairs overall, 28 on held-out proteins).
+Within proteins, evolution-vs-structure disagreement decreases monotonically with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to multivariable adjustment, panel resampling and four definitions of total disagreement; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls argue against an input-quality artifact: ESM-IF1 rescoring on experimental structures (64 assays) runs opposite to that explanation, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend. Curated disorder marks a related but distinct regime: total, not pair-specific, disagreement is elevated there and single-sequence models lose relative advantage. Disagreement regimes, discrete summaries of a continuous geometry, generalize to held-out proteins (frozen-centroid protein-level cross-validation: median Spearman 0.94; 100% of 185 positive) and replicate across independent assays (median 0.94; 37 pairs overall, 28 on held-out proteins).
 
 Disagreement is only weakly associated with prediction error in DMS (assay-level Spearman 0.032) and not at all in clinical variant classification. A biologically gated ensemble does not beat uniform averaging on DMS (paired delta +0.000; 95% CI -0.008 to +0.008), yet a DMS-trained two-family gate transfers to clinical data without retraining on clinical labels (AUROC +0.021; 95% CI +0.011 to +0.026 on a strictly non-overlapping set), though the best single expert remains superior. Disagreement among protein AI models is an AI-generated map of where evolutionarily informed and structure-conditioned predictions diverge across protein space; its primary value is explanatory, not predictive.
 
@@ -60,7 +60,7 @@ Experimental replication of regime-phenotype relationships. Because regime label
 
 ### 2.5 Relative family expertise: an IDR-specific effect, no confidence gradient
 
-We asked whether family advantage (error of other families minus own error, all in percentile space) depends on biological context (figure 5(a)-(c); Table 2). Two results follow. First, relative expertise does NOT vary along the structural-confidence axis: family advantages are small and flat across pLDDT bins (single-sequence +0.019 to +0.008; evolution +0.002 to +0.006; structure -0.006 to -0.002). Second, curated disorder shows a specific effect: single-sequence models lose relative predictive advantage in intrinsically disordered regions (-0.043) versus ordered residues (+0.038; 88% of proteins positive in ordered), while structure-conditioned models gain relative advantage in IDR (+0.060 vs +0.005). Evolutionary models show no consistent effect. We conclude that the readable context-dependence of family expertise is confined to disorder annotation, not to the confidence continuum, and is modest in size.
+We asked whether family advantage (error of other families minus own error, all in percentile space) depends on biological context (figure 5(a)-(c); Table 2). Two results follow. First, relative expertise does NOT vary along the structural-confidence axis: family advantages are small and flat across pLDDT bins (single-sequence +0.008 to +0.022; evolution +0.002 to +0.005; structure -0.002 to -0.007). Second, curated disorder shows a specific effect: single-sequence models lose relative predictive advantage in intrinsically disordered regions (-0.043) versus ordered residues (+0.038; 88% of proteins positive in ordered), while structure-conditioned models gain relative advantage in IDR (+0.060 vs +0.005). Evolutionary models show no consistent effect. We conclude that the readable context-dependence of family expertise is confined to disorder annotation, not to the confidence continuum, and is modest in size.
 
 ### 2.6 Disagreement is only weakly predictive (secondary, transparent)
 
@@ -76,7 +76,7 @@ Disagreement does not mark clinical difficulty. In contrast to DMS, misclassifie
 
 ### 2.8 BioGate on DMS: a transparent negative
 
-A softmax-gated ensemble ("BioGate"; one 32-unit hidden layer) weighting the three percentile-space family centroids from context features (pLDDT, position, length, MSA depth, functional annotations), evaluated by 5-fold UniProt-grouped CV, did not beat uniform averaging: median protein-level rho 0.551 vs 0.542, while the median within-protein paired difference was 0.000 (bootstrap 95% CI -0.008 to +0.008); the two summaries differ because the median of a difference is not the difference of medians (Supplementary figure S4) (Table 4). XGBoost ablations show context does add signal (scores-only 0.509, with context 0.551; Table S5 and figure S5), but the constrained convex-mixture gate cannot exploit it. BioGate is a constraint result: with a per-variant uncertainty signal this weak, gating cannot improve point prediction (details in Supplementary figures S4-S6).
+A softmax-gated ensemble ("BioGate"; one 32-unit hidden layer) weighting the three percentile-space family centroids from context features (pLDDT, position, length, MSA depth, functional annotations), evaluated by 5-fold UniProt-grouped CV, did not beat uniform averaging: median protein-level rho 0.551 vs 0.542, while the median within-protein paired difference was 0.000 (bootstrap 95% CI -0.008 to +0.008); the two summaries differ because the median of a difference is not the difference of medians (Supplementary figure S4) (Table 4). XGBoost ablations show context does add signal (scores-only 0.509, with context 0.551 under the per-fold-median aggregation of Table S5; 0.573 under the pooled aggregation of Table 4), but the constrained convex-mixture gate cannot exploit it. BioGate is a constraint result: with a per-variant uncertainty signal this weak, gating cannot improve point prediction (details in Supplementary figures S4-S6).
 
 ### 2.9 The uncertainty read-out is scale-dependent (methodological note)
 
@@ -86,7 +86,7 @@ Disagreement-based uncertainty is not invariant to monotonic score transformatio
 
 ### 3.0 Related work and positioning
 
-(i) Fixed-weight predictor integration (MetaSVM/MetaLR [28], ClinPred [29], BayesDel (distributed within the PERCH framework) [30], REVEL [31], CADD [32]) learns fixed weights applied uniformly; it cannot answer where and why predictor trust should differ across the mutational landscape. Our contribution is the quantitative description of the biology of disagreement itself, and the demonstration that relative family expertise is context-dependent only in a limited sense: single-sequence models lose relative advantage in curated disorder, while no expertise gradient exists along the structural-confidence axis (Section 2.5).
+(i) Meta-predictors and integrative scores (MetaSVM/MetaLR [28], ClinPred [29], BayesDel (distributed within the PERCH framework) [30], REVEL [31], CADD [32]) combine evolutionary, conservation and structural features through fitted or heuristic weights applied uniformly across variants; they cannot answer where and why predictor trust should differ across the mutational landscape. Our contribution is the quantitative description of the biology of disagreement itself, and the demonstration that relative family expertise is context-dependent only in a limited sense: single-sequence models lose relative advantage in curated disorder, while no expertise gradient exists along the structural-confidence axis (Section 2.5).
 
 (ii) Model disagreement as uncertainty in ML (deep ensembles [33], Bayesian approximations, active learning [34]). We confirm a weak uncertainty signal in DMS (Section 2.6) but show it is domain-specific (Section 2.7) and, more importantly, that disagreement carries a reproducible biological structure (Sections 2.2-2.5) that generic uncertainty theory neither predicts nor explains.
 
@@ -98,7 +98,7 @@ The central observation is that evolution-vs-structure disagreement accumulates 
 
 Two caveats bound the interpretation. First, the structure-conditioned models and the confidence metric share AlphaFold structures as input. The external controls of Section 2.2 argue against a simple input-quality explanation - experimental structures do not rescue (they hurt) low-confidence assays for ESM-IF1, and a structure-conditioned model with a distinct joint sequence-structure architecture reproduces the trend - but these controls are assay-level or single-model, and a full variant-level experimental-structure re-scoring [36,23] remains the decisive test and the primary limitation. Throughout, "structural constraints" should be read as "constraints encoded by the evaluated structure-conditioned models".
 
-Second, the interpretation is supported by three independent, mutually reinforcing lines of evidence rather than by any single statistic: (i) the residue-level disagreement-pLDDT gradient, small but consistent, robust across four disagreement definitions and to multivariable adjustment; (ii) the IDR-specific loss of relative predictive advantage of single-sequence models, replicated against curated disorder; and (iii) the reproducible regime-phenotype structure, whose consensus components replicate experimentally across independent assays. Each line is individually modest; together they indicate that the divergence between evolutionarily informed and structure-conditioned model predictions tracks the AlphaFold confidence landscape of proteins.
+Second, the interpretation is supported by three complementary lines of evidence rather than by any single statistic: (i) the residue-level disagreement-pLDDT gradient, small but consistent, robust across four disagreement definitions and to multivariable adjustment; (ii) the IDR-specific loss of relative predictive advantage of single-sequence models, replicated against curated disorder; and (iii) the reproducible regime-phenotype structure, whose consensus components replicate experimentally across independent assays. Each line is individually modest; together they indicate that the divergence between evolutionarily informed and structure-conditioned model predictions tracks the AlphaFold confidence landscape of proteins.
 
 ### 3.2 What the clinical asymmetry teaches
 
@@ -188,7 +188,7 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [15] Yang K K, Zanichelli N and Yeh H 2023 Masked inverse folding with sequence transfer for protein representation learning Protein Eng. Des. Sel. 36 gzad015
 [16] Hayes T et al 2025 Simulating 500 million years of evolution with a language model Science 387 850-8
 [17] Bhatnagar A, Jain S, Beazer J et al 2025 Scaling unlocks broader generation and deeper functional understanding of proteins bioRxiv 2025.04.15.649055
-[18] Chen B et al 2024 xTrimoPGLM: unified 100B-scale pre-trained transformer for deciphering the language of proteins bioRxiv 2024.07.24.605092
+[18] Chen B et al 2023 xTrimoPGLM: unified 100B-scale pre-trained transformer for deciphering the language of proteins bioRxiv 2023.07.05.547496
 [19] Cheng J et al 2023 Accurate proteome-wide missense variant effect prediction with AlphaMissense Science 381 eadg7492
 [20] Notin P, Kollasch A, Ritter D, van Niekerk L, Paul S, Spinner H, Rollins N, Shaw A, Orenbuch R, Weitzman R, Frazer J, Dias M, Franceschi D, Gal Y and Marks D S 2023 ProteinGym: large-scale benchmarks for protein fitness prediction and design Proc. NeurIPS 2023 Datasets and Benchmarks Track
 [21] Tsuboyama K et al 2023 Mega-scale experimental analysis of protein folding stability in biology and design Nature 620 434-44
@@ -259,8 +259,8 @@ space).** Advantage = median error of the other two families minus the
 family's own error; positive = family more accurate; protein-level
 aggregation. No context shows a consistent advantage except IDR: seq
 -0.043 (IDR) vs +0.038 (ordered); struct +0.060 vs +0.005; evo +0.016 vs
--0.011. pLDDT bins are flat (seq +0.019 to +0.008; evo +0.002 to +0.006;
-struct -0.006 to -0.002). Mechanics (core/surface/helix/sheet/loop): all
+-0.011. pLDDT bins are flat (seq +0.008 to +0.022; evo +0.002 to +0.005;
+struct -0.002 to -0.007). Mechanics (core/surface/helix/sheet/loop): all
 within +/-0.013.
 
 **Table 2 (data).** Median percentile-space family advantage by context:
@@ -300,7 +300,10 @@ thresholds; Table S4).
 **Table 4. BioGate 5-fold UniProt-grouped cross-validation (median
 protein-level Spearman, percentile space).** best single 0.473; linear
 stacking 0.528; uniform ensemble 0.542; BioGate 0.551; XGBoost
-(scores + context) 0.573. The median within-protein paired difference
+(scores + context) 0.573 (pooled out-of-fold protein median, the
+aggregation used in this table; the per-fold-median aggregation of
+Table S5 yields 0.551 for the same configuration). The median
+within-protein paired difference
 (BioGate - uniform) was 0.000 (bootstrap 95% CI -0.008 to +0.008).
 XGBoost ablations (Table S5): scores only 0.509, context only 0.167,
 scores + context 0.551.
