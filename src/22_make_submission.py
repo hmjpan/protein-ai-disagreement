@@ -198,7 +198,7 @@ Seed 2026; every figure has a machine-readable source table; all scripts log inp
 Protein AI disagreement is not merely model noise: it contains reproducible biological structure. It tracks the protein's structural-confidence landscape: evolution-vs-structure disagreement accumulates where AlphaFold confidence is low, total disagreement is elevated in intrinsically disordered regions, and the disagreement geometry decomposes into regimes whose phenotypes replicate across independent assays and generalize to held-out proteins. Relative model-family expertise shows limited context dependence: single-sequence models lose relative predictive advantage in curated disordered regions, whereas no consistent expertise gradient is observed across AlphaFold confidence -- disagreement and relative accuracy are distinct quantities. Disagreement is a weak uncertainty signal in DMS and none in clinical annotation -- a boundary condition that should discipline future use of disagreement-based confidence. Its primary value is explanatory: disagreement among protein AI models is an AI-generated map of where evolutionarily informed and structure-conditioned model predictions diverge across protein space.
 
 ## Data availability
-All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All analysis code (scripts 01-37), machine-readable source tables for every figure, and figure files are openly available at https://github.com/REPO_OWNER/protein-ai-disagreement ; a versioned archive with a citable DOI will be deposited upon acceptance.
+All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All analysis code (scripts 01-37), machine-readable source tables for every figure, and figure files are openly available at https://github.com/hmjpan/protein-ai-disagreement ; a versioned archive with a citable DOI will be deposited upon acceptance.
 
 ## References
 [1] Notin P, Kollasch A, Ritter D, van Niekerk L, Paul S, Spinner H, Rollins N, Shaw A, Orenbuch R, Weitzman R, Frazer J, Dias M, Franceschi D, Gal Y and Marks D S 2023 ProteinGym: large-scale benchmarks for protein fitness prediction and design Proc. NeurIPS 2023 Datasets and Benchmarks Track
@@ -304,7 +304,7 @@ thresholds; Table S4).
 **Table 4. BioGate 5-fold UniProt-grouped cross-validation (median
 protein-level Spearman, percentile space).** best single 0.473; linear
 stacking 0.528; uniform ensemble 0.542; BioGate 0.551; XGBoost
-(scores + context) 0.551. The median within-protein paired difference
+(scores + context) 0.573. The median within-protein paired difference
 (BioGate - uniform) was 0.000 (bootstrap 95% CI -0.008 to +0.008).
 XGBoost ablations (Table S5): scores only 0.509, context only 0.167,
 scores + context 0.551.
@@ -335,7 +335,7 @@ the same 35 clinical proteins; uniform AUROC 0.905 (n = 2,490) in all
 three settings.
 
 **Table S5. XGBoost ablations (5-fold UniProt-grouped CV, percentile
-space).** scores only 0.509; context only 0.167; scores + context 0.551;
+space; median of per-fold medians).** scores only 0.509; context only 0.167; scores + context 0.551;
 uniform ensemble 0.542.
 
 **Table S6. Model panel composition.** Per core model: architecture, input
@@ -437,10 +437,26 @@ and stated as the primary limitation.
 
 **Rigour.** Every figure has a machine-readable source table, statistical
 aggregation is protein-level with bootstrap inference, and all numbers are
-reproducible from public data and code (ProteinGym v1.3).
+reproducible from public data and code (ProteinGym v1.3). A separate
+Supplementary Information file contains Figures S1-S11 (one per page) and
+Tables S1-S8; main-text Tables 1-4 are typeset in the manuscript and main
+Figures 1-6 appear on their own pages at the end of the manuscript file.
 
 The manuscript is original, has not been published or submitted elsewhere,
 and all authors approve its submission. There are no competing interests.
+
+**Suggested reviewers** (none has authored a model used in our panel; no
+co-authorship or institutional overlap; contact details to be matched by the
+editorial office):
+
+1. Jesse C. Bloom (Fred Hutch Cancer Center, Seattle) -- deep mutational
+   scanning and quantitative evaluation of protein variant effect predictors.
+2. Rohit Singh (Broad Institute of MIT and Harvard) -- computational
+   interpretation of missense variation and clinical variant classification.
+3. Susan Marqusee (University of California, Berkeley) -- high-throughput
+   protein stability assays and biophysics of intrinsically disordered regions.
+4. David T. Jones (University College Dublin) -- large-scale assessment of
+   protein function and fitness prediction methods.
 
 Sincerely,
 
@@ -450,7 +466,7 @@ Corresponding author: [name, email]
 (OUT / "cover_letter.md").write_text(cover, encoding="utf-8")
 
 (OUT / "figures_list.md").write_text(
-    "Figure/Table caption list: see the captions sections in manuscript.md. Main figures 1-6: figures/main/. Supplementary S1-S14: figures/supplementary/.\n",
+    "Figure/Table caption list: see the captions sections in manuscript.md. Main figures 1-6: figures/main/. Supplementary S1-S11: figures/supplementary/.\n",
     encoding="utf-8")
 from docx import Document
 from docx.shared import Pt, Inches
@@ -590,12 +606,99 @@ doc.save(str(OUT / "manuscript.docx"))
 # --- pandoc pass: LaTeX math -> native Word OMML, embed figures ---
 try:
     import pypandoc
+    import csv as _csv
+    def _csv_rows(_f):
+        with open(ROOT / "results" / "statistics" / _f, encoding="utf-8") as _fh:
+            return list(_csv.DictReader(_fh))
+    def _f3(_v):
+        try:
+            _x = float(_v)
+        except (TypeError, ValueError):
+            return str(_v)
+        if abs(_x - round(_x)) < 1e-12 and abs(_x) < 1e6:
+            _i2 = int(round(_x))
+            return f"{_i2:,}" if abs(_i2) >= 1000 else str(_i2)
+        return f"{_x:.3f}"
+
+    _fam2 = {"seq": "seq", "evo": "evolution", "evolution": "evolution",
+             "struct": "structure", "structure": "structure"}
+    _ctx_order = ([("pLDDT " + b) for b in ("bin",)] * 0 +
+                  ["pLDDT<50", "50-70", "70-90", ">=90",
+                   "IDR", "ordered", "core", "surface", "helix", "sheet", "loop"])
+    _adv = {}
+    for _r in _csv_rows("family_advantage_plddt.csv"):
+        _adv[(_r["plddt_bin"], _fam2[_r["family"]])] = float(_r["median_adv"])
+    for _r in _csv_rows("disorder_family_advantage.csv"):
+        _adv[(_r["context"], _fam2[_r["family"]])] = float(_r["median_adv"])
+    for _r in _csv_rows("mechanics_family_advantage.csv"):
+        _adv[(_r["context"], _fam2[_r["family"]])] = float(_r["median_adv"])
+    _t2 = ["**Table 2 (data).** Median percentile-space family advantage by context:", "",
+           "| Context | seq | evolution | structure |", "|---|---|---|---|"]
+    for _c in _ctx_order:
+        _vs = [_adv.get((_c, _fa)) for _fa in ("seq", "evolution", "structure")]
+        if any(v is None for v in _vs):
+            continue
+        _t2.append("| " + _c + " | " + " | ".join(f"{v:.3f}" for v in _vs) + " |")
+    _t2.append("")
+    _t2.append("*Positive = family more accurate than the other two (median of "
+               "protein-level advantages). Contexts not captured by a CSV are omitted.*")
+    _t2 = "\n".join(_t2)
+
+    import statistics as _st2
+    def _med(_rows, _k):
+        return _st2.median(float(r[_k]) for r in _rows)
+    _cf = _csv_rows("clinical_transfer_performance.csv")
+    _cs = _csv_rows("clinical_transfer_nonoverlap.csv")
+    _t3 = "\n".join([
+        "**Table 3 (data).** Median per-protein clinical-transfer AUROC:", "",
+        "| Set | n proteins | uniform | BioGate | best single |",
+        "|---|---|---|---|---|",
+        f"| Full clinical benchmark, gate-complete | {len(_cf)} | "
+        f"{_med(_cf, 'auroc_uniform'):.3f} | {_med(_cf, 'auroc_biogate'):.3f} | "
+        f"{_med(_cf, 'auroc_best'):.3f} |",
+        f"| Strict non-overlap, gate-complete | {len(_cs)} | "
+        f"{_med(_cs, 'auroc_uniform'):.3f} | {_med(_cs, 'auroc_biogate'):.3f} | "
+        f"{_med(_cs, 'auroc_best'):.3f} |",
+        "| Strict non-overlap, all proteins (uniform only) | 2,490 | 0.905 | - | - |"])
+
+    _t4rows = _csv_rows("biogate_performance.csv")
+    _t4 = ["**Table 4 (data).** BioGate 5-fold UniProt-grouped cross-validation "
+           "(protein-level, percentile space):", "",
+           "| Method | proteins | median Spearman | mean Spearman | mean AUROC |",
+           "|---|---|---|---|---|"]
+    for _r in _t4rows:
+        _t4.append(f"| {_r['method']} | {_r['n_proteins']} | "
+                   f"{float(_r['median_rho']):.3f} | {float(_r['mean_rho']):.3f} | "
+                   f"{float(_r['mean_auroc']):.3f} |")
+    _t4 = "\n".join(_t4)
+    _chunks = md.split("\n\n")
+    for _tn, _tmd in (("**Table 2.", _t2), ("**Table 3.", _t3), ("**Table 4.", _t4)):
+        for _ci, _ck in enumerate(_chunks):
+            if _ck.startswith(_tn):
+                _chunks.insert(_ci + 1, _tmd)
+                break
+    md = "\n\n".join(_chunks)
+
     t = md
     mdir = ROOT / "figures" / "main"
     figs = sorted(f for f in os.listdir(mdir) if f.endswith(".png"))
-    img_lines = "\n".join(f"![]({(mdir / f).as_posix()})" for f in figs)
+    _groups = {}
+    for _fn in figs:
+        _g = re.match(r"Fig(\d)", _fn)
+        if _g:
+            _groups.setdefault(int(_g.group(1)), []).append(_fn)
+    _pbr = ('```{=openxml}\n'
+            '<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n'
+            '```')
+    _blocks = ["## Figures (embedded)"]
+    for _gn in sorted(_groups):
+        _blocks.append(_pbr)
+        _blocks.append(f"### Figure {_gn}")
+        for _fn in sorted(_groups[_gn]):
+            _blocks.append(f"![]({(mdir / _fn).as_posix()})")
+    img_lines = "\n\n".join(_blocks)
     t2 = t.replace("## Figure captions",
-                   "## Figures (embedded)\n\n" + img_lines + "\n\n## Figure captions")
+                   img_lines + "\n\n## Figure captions")
     t2 = re.sub(r"\n(?=\*\*Table )", "\n\n", t2)
     t2 = re.sub(r"\n(?=\[\d+\] )", "\n\n", t2)          # reference items
     t2 = re.sub(r"\n(?=Figure \d+\.)", "\n\n", t2)       # figure captions
@@ -603,6 +706,7 @@ try:
     t2 = re.sub(r"\n(?=Supplementary figures:)", "\n\n", t2)
     tmp = OUT / "_pandoc_src.md"
     tmp.write_text(t2, encoding="utf-8")
+    (OUT / "manuscript.md").write_text(md, encoding="utf-8")
     pypandoc.convert_file(str(tmp), "docx", format="markdown+tex_math_dollars",
                           outputfile=str(OUT / "manuscript.docx"),
                           extra_args=["--resource-path=" + str(ROOT)])

@@ -263,6 +263,24 @@ aggregation. No context shows a consistent advantage except IDR: seq
 struct -0.006 to -0.002). Mechanics (core/surface/helix/sheet/loop): all
 within +/-0.013.
 
+**Table 2 (data).** Median percentile-space family advantage by context:
+
+| Context | seq | evolution | structure |
+|---|---|---|---|
+| pLDDT<50 | 0.019 | 0.002 | -0.006 |
+| 50-70 | 0.022 | 0.003 | -0.007 |
+| 70-90 | 0.011 | 0.003 | -0.003 |
+| >=90 | 0.008 | 0.005 | -0.002 |
+| IDR | -0.043 | 0.016 | 0.060 |
+| ordered | 0.038 | -0.011 | 0.005 |
+| core | 0.007 | 0.006 | -0.003 |
+| surface | 0.010 | -0.004 | 0.003 |
+| helix | 0.008 | 0.003 | -0.002 |
+| sheet | 0.008 | 0.008 | -0.007 |
+| loop | 0.013 | 0.002 | -0.003 |
+
+*Positive = family more accurate than the other two (median of protein-level advantages). Contexts not captured by a CSV are omitted.*
+
 **Table 3. Clinical transfer AUROC (median per protein).** Full set
 (n = 1,530 of 2,525 benchmark genes with complete gate inputs): uniform
 0.877, BioGate 0.944, best single 0.963. Strict non-overlap set,
@@ -271,13 +289,31 @@ gate-complete subset (n = 788): uniform 0.867, BioGate 0.899, best single
 strict-set proteins: 0.905 (identical at 30% / 50% / 70% identity
 thresholds; Table S4).
 
+**Table 3 (data).** Median per-protein clinical-transfer AUROC:
+
+| Set | n proteins | uniform | BioGate | best single |
+|---|---|---|---|---|
+| Full clinical benchmark, gate-complete | 1530 | 0.877 | 0.944 | 0.963 |
+| Strict non-overlap, gate-complete | 788 | 0.867 | 0.899 | 0.974 |
+| Strict non-overlap, all proteins (uniform only) | 2,490 | 0.905 | - | - |
+
 **Table 4. BioGate 5-fold UniProt-grouped cross-validation (median
 protein-level Spearman, percentile space).** best single 0.473; linear
 stacking 0.528; uniform ensemble 0.542; BioGate 0.551; XGBoost
-(scores + context) 0.551. The median within-protein paired difference
+(scores + context) 0.573. The median within-protein paired difference
 (BioGate - uniform) was 0.000 (bootstrap 95% CI -0.008 to +0.008).
 XGBoost ablations (Table S5): scores only 0.509, context only 0.167,
 scores + context 0.551.
+
+**Table 4 (data).** BioGate 5-fold UniProt-grouped cross-validation (protein-level, percentile space):
+
+| Method | proteins | median Spearman | mean Spearman | mean AUROC |
+|---|---|---|---|---|
+| best_single(U_evolution) | 186 | 0.473 | 0.467 | 0.748 |
+| biogate | 186 | 0.551 | 0.526 | 0.747 |
+| linear_stacking | 186 | 0.528 | 0.521 | 0.758 |
+| uniform_ensemble | 186 | 0.542 | 0.526 | 0.757 |
+| xgboost | 186 | 0.573 | 0.546 | 0.758 |
 
 **Table S1. Residue-level pLDDT association across disagreement
 definitions.** D_std -0.078, D_MAD -0.076, D_pair -0.089, D_u -0.115
@@ -305,7 +341,7 @@ the same 35 clinical proteins; uniform AUROC 0.905 (n = 2,490) in all
 three settings.
 
 **Table S5. XGBoost ablations (5-fold UniProt-grouped CV, percentile
-space).** scores only 0.509; context only 0.167; scores + context 0.551;
+space; median of per-fold medians).** scores only 0.509; context only 0.167; scores + context 0.551;
 uniform ensemble 0.542.
 
 **Table S6. Model panel composition.** Per core model: architecture, input

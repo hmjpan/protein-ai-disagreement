@@ -44,7 +44,10 @@ and stated as the primary limitation.
 
 **Rigour.** Every figure has a machine-readable source table, statistical
 aggregation is protein-level with bootstrap inference, and all numbers are
-reproducible from public data and code (ProteinGym v1.3).
+reproducible from public data and code (ProteinGym v1.3). A separate
+Supplementary Information file contains Figures S1-S11 (one per page) and
+Tables S1-S8; main-text Tables 1-4 are typeset in the manuscript and main
+Figures 1-6 appear on their own pages at the end of the manuscript file.
 
 The manuscript is original, has not been published or submitted elsewhere,
 and all authors approve its submission. There are no competing interests.
