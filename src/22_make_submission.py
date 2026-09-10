@@ -258,7 +258,7 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [57] Blaabjerg L M, Jonsson N, Boomsma W, Stein A and Lindorff-Larsen K 2024 SSEmb: a joint embedding of protein sequence and structure enables robust variant effect predictions Nat. Commun. 15 9646
 
 ## Figure captions
-Figure 1. Protein AI model prediction landscape. (a) workflow and (b) dataset composition (final layout); (c) PCA of the variant-by-model prediction matrix; (d) median assay-level Spearman correlation heatmap; (e) hierarchical clustering of models by prediction correlation.
+Figure 1. Protein AI model prediction landscape. (a) workflow and (b) dataset composition; (c) PCA of the variant-by-model prediction matrix; (d) median assay-level Spearman correlation heatmap; (e) hierarchical clustering of models by prediction correlation.
 Figure 2. Structural-confidence gradient in disagreement (all primary statistics residue-level). (a) distribution of within-protein residue-level Spearman between pLDDT and evolution-vs-structure disagreement (median -0.04, red dashed; 67.5% negative); (b) effect sizes: lowest-vs-highest pLDDT decile difference and enrichment odds ratio; (c) four disagreement definitions (left) and 1,000 balanced family resamplings (right; red line = median -0.05); (d) disagreement in curated disordered vs ordered residues.
 Figure 3. Disagreement regimes (K = 6). (a) family-prediction scatter colored by regime; (b) pLDDT composition per regime; (c) regime centroids vs experimental Y.
 Figure 4. Reproducibility and case studies. (a) position-level regime agreement vs chance across independent assay pairs, with inset: regime-level experimental Y correlation; (b) TP53, (c) BRCA1, (d) PTEN AlphaFold structures colored by median residue disagreement.
@@ -551,11 +551,10 @@ while _i < len(_lines):
         continue
     if re.match(r"^Figure [1-6]\. ", _line):
         n = _line.split(".")[0].strip().split(" ")[1]
-        mdir = ROOT / "figures" / "main"
-        imgs = sorted(f for f in os.listdir(mdir)
-                      if re.match(rf"Fig{n}[A-E]_", f))
-        for im_ in imgs:
-            doc.add_picture(os.fspath(mdir / im_), width=Inches(6.0))
+        cdir = ROOT / "figures" / "composed"
+        cf = cdir / f"Fig{n}_full.png"
+        if cf.exists():
+            doc.add_picture(os.fspath(cf), width=Inches(6.0))
         add_rich_paragraph(doc, _line)
         _i += 1
         continue
@@ -563,12 +562,11 @@ while _i < len(_lines):
        or _line.startswith("Figure 3.") or _line.startswith("Figure 4.") \
        or _line.startswith("Figure 5.") or _line.startswith("Figure 6."):
         n = _line.split(".")[0].strip().split(" ")[1]
-        mdir = ROOT / "figures" / "main"
-        imgs = sorted(f for f in os.listdir(mdir)
-                      if re.match(rf"Fig{n}[A-E]_", f))
-        for im_ in imgs:
+        cdir = ROOT / "figures" / "composed"
+        cf = cdir / f"Fig{n}_full.png"
+        if cf.exists():
             try:
-                doc.add_picture(str(mdir / im_), width=Inches(6.0))
+                doc.add_picture(os.fspath(cf), width=Inches(6.0))
             except Exception:
                 pass
         add_rich_paragraph(doc, _line)
@@ -680,22 +678,16 @@ try:
     md = "\n\n".join(_chunks)
 
     t = md
-    mdir = ROOT / "figures" / "main"
-    figs = sorted(f for f in os.listdir(mdir) if f.endswith(".png"))
-    _groups = {}
-    for _fn in figs:
-        _g = re.match(r"Fig(\d)", _fn)
-        if _g:
-            _groups.setdefault(int(_g.group(1)), []).append(_fn)
+    cdir = ROOT / "figures" / "composed"
     _pbr = ('```{=openxml}\n'
             '<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n'
             '```')
     _blocks = ["## Figures (embedded)"]
-    for _gn in sorted(_groups):
+    for _gn in sorted(int(_m.group(1)) for _fn in os.listdir(cdir)
+                      for _m in [re.match(r"Fig(\d+)_full\.png$", _fn)] if _m):
         _blocks.append(_pbr)
         _blocks.append(f"### Figure {_gn}")
-        for _fn in sorted(_groups[_gn]):
-            _blocks.append(f"![]({(mdir / _fn).as_posix()})")
+        _blocks.append(f"![]({(cdir / f'Fig{_gn}_full.png').as_posix()})")
     img_lines = "\n\n".join(_blocks)
     t2 = t.replace("## Figure captions",
                    img_lines + "\n\n## Figure captions")

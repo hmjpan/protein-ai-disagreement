@@ -228,7 +228,7 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [55] UniProt Consortium 2023 UniProt: the universal protein knowledgebase in 2023 Nucleic Acids Res. 51 D523-31
 
 ## Figure captions
-Figure 1. Protein AI model prediction landscape. (a) workflow and (b) dataset composition (final layout); (c) PCA of the variant-by-model prediction matrix; (d) median assay-level Spearman correlation heatmap; (e) hierarchical clustering of models by prediction correlation.
+Figure 1. Protein AI model prediction landscape. (a) workflow and (b) dataset composition; (c) PCA of the variant-by-model prediction matrix; (d) median assay-level Spearman correlation heatmap; (e) hierarchical clustering of models by prediction correlation.
 Figure 2. Structural-confidence gradient in disagreement (all primary statistics residue-level). (a) distribution of within-protein residue-level Spearman between pLDDT and evolution-vs-structure disagreement (median -0.04, red dashed; 67.5% negative); (b) effect sizes: lowest-vs-highest pLDDT decile difference and enrichment odds ratio; (c) four disagreement definitions (left) and 1,000 balanced family resamplings (right; red line = median -0.05); (d) disagreement in curated disordered vs ordered residues.
 Figure 3. Disagreement regimes (K = 6). (a) family-prediction scatter colored by regime; (b) pLDDT composition per regime; (c) regime centroids vs experimental Y.
 Figure 4. Reproducibility and case studies. (a) position-level regime agreement vs chance across independent assay pairs, with inset: regime-level experimental Y correlation; (b) TP53, (c) BRCA1, (d) PTEN AlphaFold structures colored by median residue disagreement.
