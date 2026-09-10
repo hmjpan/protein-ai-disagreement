@@ -1,0 +1,46 @@
+# Protein AI Disagreement -- project configuration
+# All analysis settings are fixed here so that the pipeline is reproducible.
+
+seed: 2026
+proteingym_version: v1.3
+
+data:
+  # primary analysis set: only single amino-acid substitutions without
+  # sequence mismatch against the ProteinGym target sequence
+  primary: is_single & ~sequence_mismatch
+
+models:
+  core_panel:
+    min_frac_good_assays: 0.70      # CORE_COV_THRESH
+    min_variant_coverage: 0.90      # VAR_COV_THRESH
+    min_variants_scored_frac: 0.50  # MIN_VAR_COVERAGE (variant keeps)
+  families:
+    - evolution
+    - single_seq
+    - structure
+    - hybrid
+
+disagreement:
+  primary_metric: D_std             # SD of z-scores across core models
+  robust_metric: D_mad
+  family_metrics: [D_seq_evo, D_seq_struct, D_evo_struct, D_seq_hybrid, D_evo_hybrid, D_struct_hybrid]
+  high_disagreement_quantile: 0.90  # top decile = high-D (enrichment analyses)
+  low_disagreement_quantile: 0.10
+
+statistics:
+  bootstrap_iterations: 10000
+  permutation_iterations: 2000
+  cluster_unit: UniProt_ID          # bootstrap/permutation unit (anti-leakage)
+  fdr_method: benjamini-hochberg
+  fdr_threshold: 0.05
+
+validation:
+  split: GroupKFold_by_UniProt
+  n_folds: 5
+  metrics: [spearman, auROC, auPRC, calibration]
+  clinical: DMS_train_then_clinical_test
+
+go_no_go:
+  # Pre-registered decision thresholds (Section 60-77 of the protocol).
+  outcome_A_median_rho: 0.05        # disagreement-error association lower bound
+  outcome_C_delta_spearman: 0.01    # BioGate vs uniform ensemble

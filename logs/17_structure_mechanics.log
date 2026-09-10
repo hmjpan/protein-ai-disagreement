@@ -1,0 +1,26 @@
+[2026-09-06 20:39:59] structure mechanics residues: 66268 from 186 proteins
+[2026-09-06 20:39:59] merged mechanics onto variants: 0.990
+[2026-09-06 20:40:03] D_evo_struct_helix: median=0.5082 (n=180 proteins)
+[2026-09-06 20:40:03] D_evo_struct_sheet: median=0.5119 (n=130 proteins)
+[2026-09-06 20:40:03] D_evo_struct_loop: median=0.5259 (n=180 proteins)
+[2026-09-06 20:40:03] D_evo_struct_core: median=0.5395 (n=180 proteins)
+[2026-09-06 20:40:03] D_evo_struct_surface: median=0.5227 (n=178 proteins)
+[2026-09-06 20:40:03] rho_D_evo_struct_contact: median=0.0098 (n=182 proteins)
+[2026-09-06 20:40:03] core panel loaded: 40 models
+[2026-09-06 20:40:06]   seq @ core: adv=+0.0068 (frac_pos 0.64, n=241879)
+[2026-09-06 20:40:06]   seq @ surface: adv=+0.0096 (frac_pos 0.68, n=207201)
+[2026-09-06 20:40:06]   seq @ helix: adv=+0.0080 (frac_pos 0.66, n=268957)
+[2026-09-06 20:40:06]   seq @ sheet: adv=+0.0077 (frac_pos 0.62, n=128290)
+[2026-09-06 20:40:06]   seq @ loop: adv=+0.0127 (frac_pos 0.69, n=291924)
+[2026-09-06 20:40:06]   evo @ core: adv=+0.0058 (frac_pos 0.64, n=241879)
+[2026-09-06 20:40:06]   evo @ surface: adv=-0.0043 (frac_pos 0.42, n=207201)
+[2026-09-06 20:40:06]   evo @ helix: adv=+0.0029 (frac_pos 0.55, n=268957)
+[2026-09-06 20:40:06]   evo @ sheet: adv=+0.0084 (frac_pos 0.67, n=128290)
+[2026-09-06 20:40:06]   evo @ loop: adv=+0.0017 (frac_pos 0.52, n=291924)
+[2026-09-06 20:40:06]   struct @ core: adv=-0.0026 (frac_pos 0.48, n=241879)
+[2026-09-06 20:40:06]   struct @ surface: adv=+0.0027 (frac_pos 0.54, n=207201)
+[2026-09-06 20:40:06]   struct @ helix: adv=-0.0019 (frac_pos 0.48, n=268957)
+[2026-09-06 20:40:06]   struct @ sheet: adv=-0.0068 (frac_pos 0.43, n=128290)
+[2026-09-06 20:40:06]   struct @ loop: adv=-0.0026 (frac_pos 0.46, n=291924)
+[2026-09-06 20:40:06] figures written: Fig6A, Fig6B
+[2026-09-06 20:40:06] elapsed_seconds=50.1

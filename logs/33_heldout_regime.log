@@ -1,0 +1,12 @@
+[2026-09-09 21:41:31] variants: 696311; proteins: 186
+[2026-09-09 21:46:14] n_proteins: 185
+[2026-09-09 21:46:14] median_rho_train_profile: 0.942857142857143
+[2026-09-09 21:46:14] q25_rho: 0.8857142857142858
+[2026-09-09 21:46:14] q75_rho: 1.0
+[2026-09-09 21:46:14] frac_rho_positive: 1.0
+[2026-09-09 21:46:14] dissenting_Y_median_heldout: 0.6092668711007703
+[2026-09-09 21:46:14] frac_dissenting_Y_gt05: 0.7243243243243244
+[2026-09-09 21:46:14] heldout_crossassay_rho_median: 0.942857142857143
+[2026-09-09 21:46:14] heldout_crossassay_n_pairs: 28
+[2026-09-09 21:46:14] frac_pairs_above_chance: 1.0
+[2026-09-09 21:46:14] elapsed_seconds=287.4

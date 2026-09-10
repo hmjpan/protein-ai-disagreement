@@ -1,0 +1,8 @@
+[2026-09-06 23:08:00] core panel loaded: 40 models
+[2026-09-06 23:08:00] P53_HUMAN: 393 residues with DMS; n_variants=23449; top-D residue: 277.0 (D=1.156)
+[2026-09-06 23:08:02] P53_HUMAN: figure written
+[2026-09-06 23:08:02] BRCA1_HUMAN: 326 residues with DMS; n_variants=1837; top-D residue: 1712.0 (D=1.145)
+[2026-09-06 23:08:03] BRCA1_HUMAN: figure written
+[2026-09-06 23:08:03] PTEN_HUMAN: 403 residues with DMS; n_variants=12343; top-D residue: 1.0 (D=1.233)
+[2026-09-06 23:08:05] PTEN_HUMAN: figure written
+[2026-09-06 23:08:05] elapsed_seconds=5.6

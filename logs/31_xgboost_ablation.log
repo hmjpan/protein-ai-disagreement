@@ -1,0 +1,7 @@
+[2026-09-06 21:14:44] core panel loaded: 40 models
+[2026-09-06 21:14:50] rows: 696311; proteins: 186
+[2026-09-06 21:15:14] XGBoost scores_only: median fold rho = 0.5088
+[2026-09-06 21:15:38] XGBoost context_only: median fold rho = 0.1666
+[2026-09-06 21:16:05] XGBoost scores_context: median fold rho = 0.5505
+[2026-09-06 21:16:08] uniform ensemble: median rho = 0.5424
+[2026-09-06 21:16:08] elapsed_seconds=84.0

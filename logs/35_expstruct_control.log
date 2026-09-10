@@ -1,0 +1,9 @@
+[2026-09-09 21:48:07] Part A: n=64 assays with exp-structure scores
+[2026-09-09 21:48:07]   mean gain (exp - AF2) = -0.0574
+[2026-09-09 21:48:07]   Spearman(mean_pLDDT, gain) = +0.377 (p=0.00216)
+[2026-09-09 21:48:07]   gain in low-confidence assays: -0.0812; high-confidence: -0.0335
+[2026-09-09 21:48:07] core panel loaded: 40 models
+[2026-09-09 21:48:12] SSEmb matched variants: 693606; proteins: 183
+[2026-09-09 21:48:19] SSEmb median rho with DMS (raw) = +0.481 -> deleterosity sign = 1
+[2026-09-09 21:48:21] Part B SSEmb: n=151 proteins; median rho(pLDDT, D_evo-SSEmb) = -0.0668; frac negative 0.656
+[2026-09-09 21:48:21] elapsed_seconds=15.2

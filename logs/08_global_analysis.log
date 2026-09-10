@@ -1,0 +1,9 @@
+[2026-08-29 13:35:02] core panel loaded: 40 models
+[2026-08-29 13:35:02] core panel: 40 models; variants: 696311
+[2026-08-29 13:35:07] assays contributing to correlation matrix: 215
+[2026-08-29 13:35:07] median Spearman within family: 0.698; between families: 0.587
+[2026-08-29 13:35:08] clustering leaves: [17 24  4 28  5 10 38 39 11 12] ...
+[2026-08-29 13:35:15] PCA explained variance: [0.5849 0.0604 0.0366]
+[2026-08-29 13:35:15] PC1 |PC1| loadings top: [['PoET', 0.18694355746114816], ['TranceptEVE_L', 0.18667307133043262], ['Tranception_L', 0.18166938420016707], ['MSA_Transformer_ensemble', 0.17847550605209378], ['SiteRM', 0.17580833199903304]]
+[2026-08-29 13:35:26] figures written: Fig1C, Fig1D, Fig1E
+[2026-08-29 13:35:26] elapsed_seconds=25.4

@@ -1,0 +1,16 @@
+[2026-08-29 13:16:21] === manifest checks ===
+[2026-08-29 13:16:22] DMS_ProteinGym_substitutions.zip: entries=218 expected=218 status=OK
+[2026-08-29 13:17:00] zero_shot_substitutions_scores.zip: entries=217 expected=217 status=OK
+[2026-08-29 13:17:05] clinical_ProteinGym_substitutions.zip: entries=2525 expected=2525 status=OK
+[2026-08-29 13:17:05] ProteinGym_AF2_structures.zip: entries=199 expected=199 status=OK
+[2026-08-29 13:17:05] reference DMS_substitutions.csv: exists=True
+[2026-08-29 13:17:05] reference clinical_substitutions.csv: exists=True
+[2026-08-29 13:17:05] extracted dir DMS: 217 items
+[2026-08-29 13:17:05] extracted dir scores: 217 items
+[2026-08-29 13:17:05] extracted dir clinical: 2525 items
+[2026-08-29 13:17:05] extracted dir structures: 198 items
+[2026-08-29 13:17:05] === official model metadata ===
+[2026-08-29 13:17:07] fetched official config.json (8 top-level keys)
+[2026-08-29 13:17:07] model_metadata.csv: 97 models; families: {'single_seq': 45, 'hybrid': 29, 'evolution': 20, 'structure': 3}
+[2026-08-29 13:17:07] ALL_OK=True
+[2026-08-29 13:17:07] elapsed_seconds=46.0

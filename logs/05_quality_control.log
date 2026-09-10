@@ -1,0 +1,8 @@
+[2026-08-29 13:25:12] merged: 696311 rows
+[2026-08-29 13:25:13] model columns after official filter: 95
+[2026-08-29 13:25:52] core panel: 40 models; families: ['evolution', 'hybrid', 'single_seq', 'structure']
+[2026-08-29 13:25:52] extended: 55 models
+[2026-08-29 13:25:52] core panel models: CARP_640M, DeepSequence_ensemble, ESCOTT, ESM-IF1, ESM1b, ESM1v_ensemble, ESM2_650M, ESM3, ESMC-600M, EVE_ensemble, EVmutation, GEMME, MIF, MIFST, MSA_Transformer_ensemble, MULAN_small, PoET, ProSST-4096, Progen2_xlarge, Progen3_3b, ProtGPT2, ProtSSN_ensemble, ProteinMPNN, RITA_xl, RSALOR, S2F, S3F, SaProt_650M_AF2, SiteRM, Site_Independent, TranceptEVE_L, Tranception_L, Unirep, Unirep_evotune, VESPA, VESPAl, VenusREM, VespaG, Wavenet, xTrimoPGLM-100B-int4
+[2026-08-29 13:26:00] panel_scores.parquet: 696311 rows (kept 1.000 of variants)
+[2026-08-29 13:26:00] QC_report.md written; final panel 40 core models, 696311 variants
+[2026-08-29 13:26:00] elapsed_seconds=49.7

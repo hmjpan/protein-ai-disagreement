@@ -1,0 +1,41 @@
+model,official_family,family_in_analysis,uses_MSA,uses_structure,structure_input_is_AlphaFold,in_mechanistic_panel
+Site_Independent,MSA,evolution,True,False,False,True
+EVmutation,MSA,evolution,True,False,False,True
+DeepSequence_ensemble,MSA,evolution,True,False,False,True
+EVE_ensemble,MSA,evolution,True,False,False,True
+Unirep,Single sequence,single_seq,False,False,False,True
+Unirep_evotune,MSA,evolution,True,False,False,True
+MSA_Transformer_ensemble,MSA,evolution,True,False,False,True
+ESM1b,Single sequence,single_seq,False,False,False,True
+ESM1v_ensemble,Single sequence,single_seq,False,False,False,True
+ESM2_650M,Single sequence,single_seq,False,False,False,True
+Wavenet,MSA,evolution,True,False,False,True
+RITA_xl,Single sequence,single_seq,False,False,False,True
+Progen2_xlarge,Single sequence,single_seq,False,False,False,True
+GEMME,MSA,evolution,True,False,False,True
+VESPA,Single sequence,single_seq,False,False,False,True
+VESPAl,Single sequence,single_seq,False,False,False,True
+VespaG,Single sequence,single_seq,False,False,False,True
+ProtGPT2,Single sequence,single_seq,False,False,False,True
+Tranception_L,MSA,evolution,True,True,True,True
+TranceptEVE_L,MSA,evolution,True,True,True,True
+CARP_640M,Single sequence,single_seq,False,False,False,True
+MIF,Structure,structure,False,True,True,True
+MIFST,Single sequence & Structure,hybrid,True,True,True,False
+ESM-IF1,Structure,structure,False,True,True,True
+ProteinMPNN,Structure,structure,False,True,True,True
+ProtSSN_ensemble,Single sequence & Structure,hybrid,False,True,False,False
+SaProt_650M_AF2,Single sequence & Structure,hybrid,False,True,True,False
+PoET,MSA,evolution,True,False,False,True
+MULAN_small,Single sequence & Structure,hybrid,False,True,True,False
+ProSST-4096,Single sequence & Structure,hybrid,False,True,False,False
+ESCOTT,Structure & MSA,hybrid,False,True,True,False
+VenusREM,Structure & MSA,hybrid,False,True,True,False
+RSALOR,Structure & MSA,hybrid,False,True,True,False
+S2F,Single sequence & Structure,hybrid,False,True,True,False
+S3F,Single sequence & Structure,hybrid,False,True,True,False
+SiteRM,MSA,evolution,True,False,False,True
+ESM3,"Single sequence, Structure & Function annotations",hybrid,False,True,False,False
+ESMC-600M,Single sequence,single_seq,False,False,False,True
+xTrimoPGLM-100B-int4,Single sequence,single_seq,False,False,False,True
+Progen3_3b,Single sequence,single_seq,False,False,False,True

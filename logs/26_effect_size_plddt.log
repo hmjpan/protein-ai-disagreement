@@ -1,0 +1,8 @@
+[2026-08-30 19:31:56] rows: 696311
+[2026-08-30 19:31:57] proteins analysed: 154
+[2026-08-30 19:31:58] dD_evo_struct_decile: median = +0.0571 [+0.0134, +0.0838], n_proteins = 154
+[2026-08-30 19:31:58] dD_std_decile: median = +0.0511 [+0.0350, +0.0755], n_proteins = 154
+[2026-08-30 19:31:58] cohens_d: median = +0.1497 [+0.0438, +0.2330], n_proteins = 154
+[2026-08-30 19:31:58] enrich_OR: median = +1.8433 [+1.6167, +2.0447], n_proteins = 136
+[2026-08-30 19:31:58] pooled enrichment OR = 1.49 (95% CI [1.35, 1.65])
+[2026-08-30 19:31:58] elapsed_seconds=2.3

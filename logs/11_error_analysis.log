@@ -1,0 +1,12 @@
+[2026-09-06 20:48:51] core panel loaded: 40 models
+[2026-09-06 20:48:56] merged rows: 696311
+[2026-09-06 20:48:56] mean |S-Y| = 0.2045
+[2026-09-06 20:49:12] median assay rho(D,error) = 0.0315 [0.0228, 0.0465]; frac rho>0 = 0.707; median n = 1353
+[2026-09-06 20:49:13] decile errors: 0.2006, 0.2026, 0.2023, 0.2033, 0.2037, 0.2035, 0.2039, 0.2048, 0.2060, 0.2144
+[2026-09-06 20:49:16] pLDDT-stratified rho: <50:0.040; 50-70:0.027; 70-90:0.036; >=90:0.029
+[2026-09-06 20:49:43] LOMO (z) median rho range: 0.0271 - 0.0391
+[2026-09-06 20:49:43] median assay rho(D_mad,error) = 0.0255
+[2026-09-06 20:49:44] median assay rho(D_u,error) = 0.1447 (methodological note)
+[2026-09-06 20:49:44] GO/NO-GO 1 verdict: GO
+[2026-09-06 20:49:45] figures written: Fig2A, Fig2B
+[2026-09-06 20:49:45] elapsed_seconds=54.7

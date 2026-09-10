@@ -1,0 +1,8 @@
+[2026-09-06 20:12:29] clinical proteins: 2525; DMS proteins: 217
+[2026-09-06 20:13:11] threshold >= 30%: excluded 35 proteins; retained 60214 variants
+[2026-09-06 20:13:23]   uniform AUROC (n=2490 proteins): 0.9048
+[2026-09-06 20:13:23] threshold >= 50%: excluded 35 proteins; retained 60214 variants
+[2026-09-06 20:13:35]   uniform AUROC (n=2490 proteins): 0.9048
+[2026-09-06 20:13:35] threshold >= 70%: excluded 35 proteins; retained 60214 variants
+[2026-09-06 20:13:47]   uniform AUROC (n=2490 proteins): 0.9048
+[2026-09-06 20:13:47] elapsed_seconds=78.9

@@ -1,0 +1,7 @@
+[2026-09-06 20:03:27] variants assigned: 696311
+[2026-09-06 20:03:27] assay pairs with >=3 shared regimes: 37
+[2026-09-06 20:03:27] median rho(regime-level Y across assays) = +0.943
+[2026-09-06 20:03:27] consensus-damaging consistent (both assays Y>0.5): 1.000
+[2026-09-06 20:03:27] consensus-tolerant consistent (both assays Y<0.5): 1.000
+[2026-09-06 20:03:27] structure-dissenting damaging in both assays (where present): 0.919 (37 pairs)
+[2026-09-06 20:03:27] elapsed_seconds=46.3

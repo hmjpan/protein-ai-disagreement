@@ -1,0 +1,5 @@
+[2026-08-29 18:05:51] assigned variants: 696311; proteins: 186
+[2026-08-29 18:05:55] protein-assay pairs with >=20 shared positions: 34 (from 24 multi-assay proteins)
+[2026-08-29 18:05:55] mean position-level agreement: 0.763 (chance 0.215); excess 0.548
+[2026-08-29 18:05:55] fraction of pairs with agreement > chance: 1.000
+[2026-08-29 18:05:55] elapsed_seconds=5.4

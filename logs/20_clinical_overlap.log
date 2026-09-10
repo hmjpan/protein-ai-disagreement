@@ -1,0 +1,10 @@
+[2026-09-06 20:56:25] clinical proteins: 2525; DMS proteins: 186
+[2026-09-06 20:56:25] RefSeq->UniProt mapping skipped (API unreliable); homology exclusion below subsumes identity-level overlap
+[2026-09-06 20:56:25] clinical proteins sharing UniProt with DMS: 0
+[2026-09-06 20:57:09] clinical proteins with >= 70% identity to a DMS protein: 35
+[2026-09-06 20:57:09] STRICT exclusion set: 35 clinical proteins
+[2026-09-06 20:57:10] clinical variants retained: 60214/62727
+[2026-09-06 20:57:21] BioGate (2-expert) retrained on full DMS for strict-set evaluation
+[2026-09-06 20:57:55] non-overlap transfer AUROC (uniform ensemble; median over 788 proteins): 0.8673
+[2026-09-06 20:57:55]   vs full-set uniform (from 14): 0.877; n proteins retained: 788
+[2026-09-06 20:57:55] elapsed_seconds=90.1

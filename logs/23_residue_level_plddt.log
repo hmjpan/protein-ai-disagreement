@@ -1,0 +1,11 @@
+[2026-08-30 19:15:09] rows: 696311
+[2026-08-30 19:15:10] proteins analysed: 154
+[2026-08-30 19:15:11] 
+      metric  median  ci_low  ci_high  frac_negative  wilcoxon_p
+ rho_D_plddt -0.0781 -0.0999  -0.0410         0.7143      0.0000
+rho_De_plddt -0.0415 -0.0640  -0.0274         0.6753      0.0000
+rho_Ds_plddt  0.0111 -0.0203   0.0320         0.4740      0.9576
+tau_De_plddt -0.0288 -0.0436  -0.0199         0.6623      0.0000
+[2026-08-30 19:15:12] dD_evo_struct: median low-tertile-minus-high = +0.0265 [+0.0048, +0.0410], frac positive 0.610
+[2026-08-30 19:15:12] dD_std: median low-tertile-minus-high = +0.0106 [+0.0037, +0.0198], frac positive 0.604
+[2026-08-30 19:15:12] elapsed_seconds=4.0

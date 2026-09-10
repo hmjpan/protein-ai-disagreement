@@ -1,0 +1,18 @@
+[2026-09-06 20:54:24] clinical reference proteins: 2525
+[2026-09-06 20:54:24] clinical score files: 2525
+[2026-09-06 20:54:24] core panel loaded: 40 models
+[2026-09-06 20:54:31] clinical variants: 62727; proteins: 2525; clinical core panel: ['TranceptEVE_L', 'GEMME', 'ESM1b', 'PoET']
+[2026-09-06 20:54:31] labeled: 62727 (pathogenic=32000, benign=30727)
+[2026-09-06 20:54:35] clinical disagreement computed on 62727 variants; median D = 0.6915
+[2026-09-06 20:54:36] median D incorrect=0.6618 vs correct=0.6931; n_proteins=809; frac D_inc>D_cor: 0.414
+[2026-09-06 20:54:36] median D pathogenic=0.6934 benign=0.6898
+[2026-09-06 20:54:37] clinical expert families: ['S_single_seq', 'S_evolution']
+[2026-09-06 20:54:46] BioGate trained on full DMS set (2-expert gating)
+[2026-09-06 20:54:51] clinical transfer set: 62727 variants, 2525 proteins
+[2026-09-06 20:55:00] clinical best single model: TranceptEVE_L
+[2026-09-06 20:55:05] clinical transfer AUROC (protein-level median, n=1530):
+[2026-09-06 20:55:05]   auroc_uniform: 0.8772
+[2026-09-06 20:55:05]   auroc_biogate: 0.9444
+[2026-09-06 20:55:05]   auroc_best: 0.9631
+[2026-09-06 20:55:06] figures written: Fig7A, Fig7B
+[2026-09-06 20:55:06] elapsed_seconds=42.2
