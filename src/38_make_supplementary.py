@@ -51,8 +51,10 @@ FIG_S = {
        "boundary (no boundary effect).",
     4: "Figure S4. BioGate 5-fold UniProt-grouped cross-validation: protein-level "
        "Spearman distributions against all baselines.",
-    5: "Figure S5. BioGate and XGBoost ablations (scores-only, context-only, "
-       "scores+context; Table S5).",
+    5: "Figure S5. BioGate context-feature ablation: validation Spearman for the "
+       "full gate versus removal of pLDDT (no_plddt), functional annotations "
+       "(no_ann) or MSA-depth (no_msa) context features. The "
+       "scores-only / context-only / scores+context XGBoost comparison is in Table S5.",
     6: "Figure S6. Leave-one-model-out sensitivity of the disagreement-error "
        "association (range 0.027-0.039).",
     7: "Figure S7. Percentile (u) versus inverse-normal (z) disagreement scale: "
@@ -79,8 +81,8 @@ for pt in parts:
     if not m:
         m = re.match(r"\*\*Table (S\d)\.(.*)$", pt, re.S)
     if m:
-        TBL_CAP[m.group(1)] = "Table " + m.group(1) + "." + m.group(2)
-assert len(TBL_CAP) == 8, sorted(TBL_CAP)
+        TBL_CAP[m.group(1)] = ("Table " + m.group(1) + "." + m.group(2)).replace("**", "")
+assert len(TBL_CAP) == 9, sorted(TBL_CAP)
 
 doc = Document()
 st = doc.styles["Normal"]
@@ -121,14 +123,16 @@ para("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence",
 para("")
 para("Contents", bold=True)
 para("Supplementary Figures S1-S11 (one figure per page).", size=10.5)
-para("Supplementary Tables S1-S8.", size=10.5)
+para("Supplementary Tables S1-S9.", size=10.5)
 para("")
 para("All underlying machine-readable tables and pipeline code (scripts 01-37) "
      "are archived with the manuscript at "
      "https://github.com/hmjpan/protein-ai-disagreement (results/ and figures/ "
-     "directories). Statistical aggregation is protein-level with bootstrap "
-     "inference throughout; the analysis plan and GO/NO-GO thresholds were fixed "
-     "in config.yaml before the final analyses.", size=10.5)
+     "directories). Primary inferential summaries aggregate at the protein "
+     "level where applicable, with bootstrap inference used for the principal "
+     "effect estimates; assay-, residue- and variant-level quantities are "
+     "labelled as such at each point of use. The analysis plan and GO/NO-GO "
+     "thresholds were fixed in config.yaml before the final analyses.", size=10.5)
 
 # ---- supplementary figures ----
 doc.add_page_break()
@@ -175,16 +179,38 @@ add_table(["Pair", "median rho vs pLDDT", "n proteins"],
            ["% proteins with more negative evo-vs-struct rho",
             f"{sum(1 for r in asym if float(r['rho_evo_struct']) < float(r['rho_seq_struct'])) / len(asym) * 100:.0f}%", "-"]])
 para("")
-para("(ii) Structure-model DMS correlation by pLDDT bin:", bold=True, size=10)
-add_table(["pLDDT bin", "model", "n variants", "n assays", "median rho DMS"],
+para("(ii) Structure-model DMS association, median |Spearman rho| with the DMS "
+     "fitness score (released structure scores are oriented to deleteriousness, "
+     "so signed correlations are negative):", bold=True, size=10)
+add_table(["pLDDT bin", "model", "n variants", "n assays", "median |rho| vs DMS"],
           [[r["plddt_bin"], r["model"], fmt(r["n_variants"]), r["n_assays"],
-            fmt(r["median_rho_dms"])]
+            fmt(abs(float(r["median_rho_dms"])))]
            for r in rows_of("confound_control_accuracy.csv")])
 para("")
 para("(iii) Structure-model score coverage:", bold=True, size=10)
 add_table(["pLDDT bin", "model", "fraction scored"],
           [[r["plddt_bin"], r["model"], fmt(r["frac_scored"])]
            for r in rows_of("confound_control_coverage.csv")])
+para("")
+para("(iv) Protein-fixed-effects regression of residue-level "
+     "evo-vs-structure disagreement on pLDDT (dependent variable: "
+     "per-residue median disagreement; within-protein demeaning = protein "
+     "dummies; protein-clustered standard errors; beta per 10 pLDDT units):",
+     bold=True, size=10)
+mv = rows_of("multivariable_regression.csv")
+add_table(["Model", "beta pLDDT (per 10 units)", "95% CI", "clustered SE",
+           "P", "n residues", "proteins", "R2"],
+          [[r["model"], f"{float(r['beta_plddt']) * 10:.4f}",
+            f"[{float(r['ci_low']) * 10:.4f}, {float(r['ci_high']) * 10:.4f}]",
+            f"{float(r['se_plddt']) * 10:.4f}", f"{float(r['p_plddt']):.4f}",
+            fmt(r["n"]), r["n_proteins"], f"{float(r['r2']):.4f}"]
+           for r in mv])
+para("Adjusted model covariates (standardized direction of median "
+     "coefficients): disorder beta -0.046 (P 0.082), contact density +0.006, "
+     "helix -0.008, sheet -0.033, normalized position, MSA-depth category and "
+     "structure coverage (full coefficients in "
+     "results/statistics/multivariable_regression.csv). The pLDDT term remains "
+     "negative and significant after adjustment.", size=9)
 
 # S3: regime robustness across K
 cap("S3")
@@ -218,11 +244,19 @@ add_table(["Configuration", "median protein-level Spearman"],
 # S6: model panel composition
 cap("S6")
 add_table(["Model", "Official family", "Analysis family", "Uses MSA",
-           "Uses structure", "Structure input AlphaFold", "In mechanistic panel"],
+           "Uses structure", "Structure input AlphaFold", "In mechanistic panel",
+           "Notes"],
           [[r["model"], r["official_family"], r["family_in_analysis"],
             r["uses_MSA"], r["uses_structure"], r["structure_input_is_AlphaFold"],
-            r["in_mechanistic_panel"]]
+            r["in_mechanistic_panel"], r.get("notes", "")]
            for r in rows_of("model_panel_table.csv")])
+para("Official family = model_type from the ProteinGym v1.3 config (the source "
+     "of all modality flags). Tranception/TranceptEVE use an MSA only for "
+     "inference-time homolog retrieval (not structure input); MIF-ST transfers "
+     "sequence representations from a pretrained single-sequence language model "
+     "(no MSA input). All structure-based scores in the released ProteinGym "
+     "evaluation operate on the AlphaFold2 target structures shipped with the "
+     "benchmark.", size=9)
 
 # S7: clinical paired deltas
 cap("S7")
@@ -239,15 +273,38 @@ add_table(["Statistic", "Value"],
           [["Proteins with held-out support", h["n_proteins"]],
            ["Median Spearman, held-out regime profile vs training profile",
             f"{fmt(h['median_rho_train_profile'])} (IQR {fmt(h['q25_rho'])}-{fmt(h['q75_rho'])})"],
-           ["Proteins with positive correlation", fmt(h["frac_rho_positive"])],
+           ["Fraction of proteins with positive correlation",
+            f"{float(h['frac_rho_positive']):.3f} ({h['n_proteins']}/{h['n_proteins']})"],
            ["Dissenting regime held-out Y (median)", fmt(h["dissenting_Y_median_heldout"])],
-           ["Proteins where dissenting regime damaging (Y > 0.5)",
-            fmt(h["frac_dissenting_Y_gt05"])],
+           ["Fraction of supported proteins with dissenting regime Y > 0.5",
+            f"{float(h['frac_dissenting_Y_gt05']):.3f}"],
            ["Held-out cross-assay replication, median rho",
             f"{fmt(h['heldout_crossassay_rho_median'])} ({h['heldout_crossassay_n_pairs']} pairs)"],
-           ["Cross-assay pairs above chance", fmt(h["frac_pairs_above_chance"])]])
+           ["Fraction of held-out cross-assay pairs above chance",
+            f"{float(h['frac_pairs_above_chance']):.3f} "
+            f"({h['heldout_crossassay_n_pairs']}/{h['heldout_crossassay_n_pairs']})"]])
 para("Per-protein values: results/statistics/heldout_regime_per_protein.csv.",
      size=9)
+
+# S9: BIC sweep + functional-feature permutation enrichment
+cap("S9")
+para("(a) GMM model selection (family-centroid input, covariance_type=full, "
+     "n_init=3, identical settings to the regime fit):", bold=True, size=10)
+add_table(["K", "BIC", "selected"],
+          [[r["K"], f"{float(r['BIC']):,.0f}", "yes" if r["selected"] == "True" else ""]
+           for r in rows_of("gmm_bic_table.csv")])
+para("")
+para("(b) Within-protein permutation enrichment of high-disagreement residues "
+     "for UniProt functional features (BH FDR across features):",
+     bold=True, size=10)
+add_table(["Feature", "proteins", "mean OR (high vs low decile)",
+           "mean permutation P", "BH q"],
+          [[r["feature"], r["n_proteins"] if r["n_proteins"] != "0" else "-",
+            r["mean_or"] if r["mean_or"] != "inf" else "undefined",
+            fmt(r["mean_perm_p"]), fmt(r["BH_q"])]
+           for r in rows_of("functional_enrichment.csv")])
+para("No feature survives BH control (minimum q = 0.60); disagreement "
+     "structure is not a proxy for functional-site annotation.", size=9)
 
 doc.save(str(OUT / "supplementary.docx"))
 print("supplementary.docx:", (OUT / "supplementary.docx").stat().st_size,

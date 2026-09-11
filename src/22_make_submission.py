@@ -32,7 +32,7 @@ TITLE = ("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence")
 
 ABSTRACT = """Protein AI models -- evolutionary (MSA), single-sequence language, and structure-conditioned predictors -- are usually treated as competing estimators of mutation effect. Here we ask what it means, biologically, when they disagree. Using 696,311 single missense substitutions across 217 deep-mutational scanning assays (ProteinGym v1.3) scored by 40 architecturally diverse zero-shot models, we show that disagreement contains reproducible biological structure: it tracks AlphaFold structural confidence.
 
-Within proteins, evolution-vs-structure disagreement decreases monotonically with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to multivariable adjustment, panel resampling and four definitions of total disagreement; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls argue against an input-quality artifact: ESM-IF1 rescoring on experimental structures (64 assays) runs opposite to that explanation, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend. Curated disorder marks a related but distinct regime: total, not pair-specific, disagreement is elevated there and single-sequence models lose relative advantage. Disagreement regimes, discrete summaries of a continuous geometry, generalize to held-out proteins (frozen-centroid protein-level cross-validation: median Spearman 0.94; 100% of 185 positive) and replicate across independent assays (median 0.94; 37 pairs overall, 28 on held-out proteins).
+Within proteins, evolution-vs-structure disagreement is negatively associated with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to multivariable adjustment, panel resampling and four definitions of total disagreement; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls argue against an input-quality artifact: ESM-IF1 rescoring on experimental structures (64 assays) runs opposite to that explanation, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend. Curated disorder marks a related but distinct regime: total, not pair-specific, disagreement is elevated there and single-sequence models lose relative advantage. Disagreement regimes, discrete summaries of a continuous geometry, generalize to held-out proteins (frozen-centroid protein-level cross-validation: median Spearman 0.94; 100% of 185 positive) and replicate across independent assays (median 0.94; 37 pairs overall, 28 on held-out proteins).
 
 Disagreement is only weakly associated with prediction error in DMS (assay-level Spearman 0.032) and not at all in clinical variant classification. A biologically gated ensemble does not beat uniform averaging on DMS (paired delta +0.000; 95% CI -0.008 to +0.008), yet a DMS-trained two-family gate transfers to clinical data without retraining on clinical labels (AUROC +0.021; 95% CI +0.011 to +0.026 on a strictly non-overlapping set), though the best single expert remains superior. Disagreement among protein AI models is an AI-generated map of where evolutionarily informed and structure-conditioned predictions diverge across protein space; its primary value is explanatory, not predictive."""
 
@@ -42,9 +42,9 @@ KEYWORDS = ["variant effect prediction", "protein language models",
 
 BODY = r"""## 1. Introduction
 
-Missense variation is central to protein function and human disease, and predicting its effects is a foundational problem in computational biology. Over the past five years the field has moved from evolutionary statistics (GEMME [5], EVE [3], DeepSequence [4], EVmutation [33]) to single-sequence protein language models (ESM-1v [6], ESM-1b [29], ESM-2 [7], ProtTrans [30], ProGen [32], ProGen2 [31], VESPA [27]) and structure-conditioned predictors (ESM-IF1 [8], ProteinMPNN [9], SaProt [11], MIF/MIF-ST [26]), culminating in large foundation models (ESM3 [12], ProGen3 [13], xTrimoPGLM [14], AlphaMissense [34]) whose zero-shot mutation scores are evaluated against deep mutational scanning (DMS) experiments at scale (ProteinGym [1]; DMS methodology [28, 41]).
+Missense variation is central to protein function and human disease, and predicting its effects is a foundational problem in computational biology. Over the past five years the field has moved from evolutionary statistics (GEMME [5], EVE [3], DeepSequence [4], EVmutation [33]) to single-sequence protein language models (ESM-1v [6], ESM-1b [29], ESM-2 [7], ProtTrans [30], ProGen [32], ProGen2 [31], VESPA [27]) and structure-conditioned predictors (ESM-IF1 [8], ProteinMPNN [9], SaProt [11], MIF/MIF-ST [26]), culminating in large-scale protein foundation models and specialized variant-effect predictors (ESM3 [12], ProGen3 [13], xTrimoPGLM [14], AlphaMissense [34]) whose zero-shot mutation scores are evaluated against deep mutational scanning (DMS) experiments at scale (ProteinGym [1]; DMS methodology [28, 41]).
 
-These models are usually benchmarked as competitors: one average performance number decides the winner. But average performance hides structure. Models are trained on different modalities -- evolutionary conservation (MSA families), sequence statistics alone, or three-dimensional structure -- and there is no a priori reason they should encode identical biological constraints. A substitution that violates conservation while preserving local folding compatibility, or one in a flexible region for which the available structural representation is uncertain, may split the panel cleanly. The information the models share is a consensus estimate; the information on which they diverge may be information about biology.
+These models are usually benchmarked as competitors: one average performance number decides the winner. But average performance hides structure. Models are trained on different modalities -- evolutionary conservation (MSA families), sequence statistics alone, or three-dimensional structure -- and there is no a priori reason they should encode identical biological constraints. A substitution that violates conservation while preserving local folding compatibility, or one in a flexible region for which the available structural representation is uncertain, may split the panel cleanly. The information the models share is a consensus estimate; the information on which they diverge may be information about biology. Two recent lines make this question concrete from different angles: Livesey and Marsh [58] show that where individual predictors disagree with multiplexed experiments, the discordance is systematic rather than noise; Prabakaran and Bromberg [59] quantify uncertainty internal to a single protein language model's embeddings. Neither asks how disagreement between model families with different input modalities is structured across protein space.
 
 We therefore treat disagreement among architecturally diverse protein AI models as a scientific observable: a residue-level measurement of where biological constraints are encoded inconsistently across model families. The question is not "who wins?" but "what biology does disagreement reveal?"
 
@@ -68,7 +68,7 @@ The trend is robust to the total-disagreement definition (Methods 4.3): z-based 
 
 The effect is specific to family pairs: evolution-vs-structure disagreement shows the negative trend, whereas sequence-vs-structure disagreement does not (median residue-level rho 0.01, CI overlapping zero; Table S2). Disagreement therefore accumulates in low-confidence regions specifically as a conflict between evolutionary-model and structure-conditioned model predictions.
 
-Confound controls (shared AlphaFold input). The structure-conditioned models and the pLDDT metric derive from the same AlphaFold structures, so low pLDDT might simply degrade structure-model inputs. We report three partial controls (Table S2). (i) Asymmetry: if disagreement were a pure input-quality artifact, sequence-vs-structure disagreement should rise at low pLDDT exactly like evolution-vs-structure disagreement, since the same structure models are involved; it does not (median residue-level rho +0.01 vs -0.04; asymmetry -0.03, 65% of proteins in the evo-struct direction). (ii) Structure-model accuracy: structure-conditioned model scores do lose DMS-correlation at low pLDDT (e.g., ESM-IF1 median per-assay rho 0.04 at pLDDT<50 vs 0.47 at >=90), confirming that their scores carry less information there -- the input-quality pathway is real and is a documented limitation, not fully resolvable without experimental structures. (iii) Coverage: structure-model score availability is complete at all pLDDT levels (100%), ruling out missingness-driven artifacts. Beyond these internal controls we use two external datasets. (iv) Experimental-structure gain: for 64 assays that have ESM-IF1 scores computed on BOTH experimental PDB structures and AlphaFold2 structures [56], the assay-level gain (experimental minus AlphaFold2) is negative on average (-0.057) and significantly MORE negative for low-confidence assays (median gain -0.081 vs -0.023; difference -0.058, bootstrap 95% CI -0.099 to -0.013, Mann-Whitney p = 0.011; Spearman(mean pLDDT, gain) = +0.38, p = 0.002; figure S10): replacing AlphaFold inputs with experimental structures does not rescue low-confidence assays, contrary to what a pure input-quality explanation predicts. (v) Distinct-architecture replication: SSEmb -- which jointly embeds MSA information and structure in one architecture (an MSA-Transformer language model combined with a structure-conditioned graph network) and was trained under a different pipeline [57] -- shows the same residue-level trend for evolution-vs-SSEmb disagreement (median rho -0.067, 65.6% of 151 proteins negative; figure S11), matching the inverse-folding result (-0.042). A variant-level experimental-structure re-scoring of all models remains the decisive future control and is stated as a limitation.
+Confound controls (shared AlphaFold input). The structure-conditioned models and the pLDDT metric derive from the same AlphaFold structures, so low pLDDT might simply degrade structure-model inputs. We report three partial controls (Table S2). (i) Asymmetry: if disagreement were a pure input-quality artifact, sequence-vs-structure disagreement should rise at low pLDDT exactly like evolution-vs-structure disagreement, since the same structure models are involved; it does not (median residue-level rho +0.01 vs -0.04; asymmetry -0.03, 65% of proteins in the evo-struct direction). (ii) Structure-model accuracy: structure-conditioned model scores do lose DMS-correlation at low pLDDT (e.g., ESM-IF1 median per-assay |rho| with DMS fitness rising from 0.04 at pLDDT<50 to 0.47 at >=90; structure scores are oriented to deleteriousness, so signed correlations are negative), confirming that their scores carry less information there -- the input-quality pathway is real and is a documented limitation, not fully resolvable without experimental structures. (iii) Coverage: structure-model score availability is complete at all pLDDT levels (100%), ruling out missingness-driven artifacts. Beyond these internal controls we use two external datasets. (iv) Experimental-structure gain: for 64 assays that have ESM-IF1 scores computed on BOTH experimental PDB structures and AlphaFold2 structures [56], the assay-level gain (experimental minus AlphaFold2) is negative on average (-0.057) and significantly MORE negative for low-confidence assays (median gain -0.081 vs -0.023; difference -0.058, bootstrap 95% CI -0.099 to -0.013, Mann-Whitney p = 0.011; Spearman(mean pLDDT, gain) = +0.38, p = 0.002; figure S10): replacing AlphaFold inputs with experimental structures does not rescue low-confidence assays, contrary to what a pure input-quality explanation predicts. (v) Distinct-architecture replication: SSEmb -- which jointly embeds MSA information and structure in one architecture (an MSA-Transformer language model combined with a structure-conditioned graph network) and was trained under a different pipeline [57] -- shows the same residue-level trend for evolution-vs-SSEmb disagreement (median rho -0.067, 65.6% of 151 proteins negative; figure S11), matching the inverse-folding result (-0.042). A variant-level experimental-structure re-scoring of all models remains the decisive future control and is stated as a limitation.
 
 Panel-composition checks. (a) A strict one-representative-per-architecture panel (ESM-1v, GEMME, EVE, MSA-Transformer, ESM-IF1, ProteinMPNN, SaProt, Tranception) reproduces the residue-level trend (median rho -0.06; 68% of proteins negative). (b) 1,000 resamplings drawing three models from the evolutionary and sequence families reproduce the trend at residue level (median of per-iteration medians -0.05, 95% range [-0.08, -0.02]; 100% of iterations negative; figure 2(c), right). Because only three structure-family models were available in the released scores, the structure panel was fixed in these resamplings; composition robustness is therefore established for the evolutionary and sequence families, and the structure family is checked by the architecture panel in (a).
 
@@ -76,11 +76,11 @@ Independent disorder annotation. Curated UniProt disordered regions (transferred
 
 ### 2.3 Residue mechanics: contact density and secondary structure
 
-Using pydssp secondary-structure assignment and CA contact density from the same AlphaFold structures, we tested whether family relative advantage varies with residue mechanics. In the percentile space used throughout for accuracy comparisons, no mechanical context showed a consistent family advantage (all median advantages within +/-0.013; helix/sheet/core/surface/loop), and contact density showed no monotonic association with evolution-vs-structure disagreement (median within-protein rho 0.01). These analyses are reported as a null result: residue mechanics, as captured by secondary structure and contact density, does not shift relative family expertise beyond the confidence axis (figure S9). Disagreement likewise does not concentrate at UniProt domain boundaries (median disagreement is flat across distance-to-boundary bins: 0.63, 0.59, 0.58 and 0.63 for 0-5, 6-10, 11-20 and >20 residues; figure S3).
+Using pydssp secondary-structure assignment and CA contact density from the same AlphaFold structures, we tested whether family relative advantage varies with residue mechanics. In the percentile space used throughout for accuracy comparisons, no mechanical context showed a consistent family advantage (all median advantages within +/-0.013; helix/sheet/core/surface/loop), and contact density showed no monotonic association with evolution-vs-structure disagreement (median within-protein rho 0.01). These analyses are reported as a null result: residue mechanics, as captured by secondary structure and contact density, does not shift relative family expertise beyond the confidence axis (figure S9). Disagreement likewise does not concentrate at UniProt domain boundaries (median disagreement is flat across distance-to-boundary bins: 0.63, 0.59, 0.58 and 0.63 for 0-5, 6-10, 11-20 and >20 residues; figure S3). As a control, within-protein permutation enrichment of high-disagreement residues against UniProt functional features (active site, binding site, domain, transmembrane, modified residue, disulfide, region, motif) yields nothing that survives Benjamini-Hochberg control (all q >= 0.60; Table S9) -- the disagreement structure is positional-confidence-driven, not a proxy for functional-site annotation.
 
 ### 2.4 Disagreement regimes: discrete summaries of a continuous geometry
 
-Gaussian mixture modeling of the three mechanistic family predictions (BIC-optimal [53] K = 6; figure 3(a)-(c)) assigns every variant to a regime (Table 1). We treat regimes as discrete summaries of an underlying continuous disagreement geometry, not as evidence of discrete natural categories.
+Gaussian mixture modeling of the three mechanistic family predictions (BIC-optimal [53] K = 6, with the K = 2-8 BIC sweep in Table S9; figure 3(a)-(c)) assigns every variant to a regime (Table 1). We treat regimes as discrete summaries of an underlying continuous disagreement geometry, not as evidence of discrete natural categories.
 
 Consensus regimes align with the measured DMS phenotype: consensus-damaging variants have median experimental fitness rank 0.19 (damaged), consensus-tolerant 0.74 (tolerant). In the structure-dissenting regime, the measured DMS phenotype aligns more closely with sequence and evolutionary predictions than with structure-conditioned predictions (median experimental Y = 0.65). We state this as an alignment-of-evidence statement and do not claim that structure-conditioned models are "wrong": DMS phenotypes (activity, binding, abundance, fitness) are not direct measures of folding compatibility. (Regime names are descriptive labels assigned post hoc from the actual centroids; machine-readable labels are regime_0-regime_5.)
 
@@ -102,11 +102,11 @@ The clinical benchmark contains 2,525 genes / ~63K variants; of these, 1,530 pro
 
 Strict non-overlap control. Clinical proteins sharing >= 70% sequence identity with any of the 186 DMS proteins used to train the gate (35 proteins; same-protein overlaps are necessarily captured by this threshold) were excluded, leaving 60,214 variants across 2,490 proteins. On this strict set the uniform ensemble AUROC was 0.905 (all 2,490 proteins), and restricting to the 788 proteins with complete two-family gate inputs, AUROC was 0.867 (uniform), 0.899 (BioGate) and 0.974 (best single, reselected within the strict set) (Table 3). The transfer is insensitive to the identity threshold (30% / 50% / 70% all exclude the same 35 proteins and give uniform AUROC 0.905; Table S4). The DMS-trained gating function therefore retains a modest relative advantage over uniform averaging on a strictly non-overlapping set (paired median delta AUROC +0.021, 95% CI +0.011 to +0.026, 59% of proteins positive; Table S7); it does not, however, exceed the best base expert (paired delta -0.061, 93% of proteins where best > BioGate). The gate was a separately trained two-family model (sequence + evolution) learned exclusively on DMS, frozen, and applied once - a gating STRATEGY transferred, not the three-expert DMS gate itself. The gate-complete subsets (1,530 full; 788 strict) are defined by input completeness and are not representative of the full 2,525-gene benchmark.
 
-Disagreement does not mark clinical difficulty. In contrast to DMS, misclassified clinical variants have lower disagreement than correctly classified ones (median 0.662 vs 0.693; 41.4% of proteins with higher D in misclassified; (figure 6(b)), and pathogenic vs benign variants show no disagreement difference (0.693 vs 0.690). Disagreement-as-uncertainty is therefore domain-specific: a property of well-posed fitness landscapes, not of heterogeneous disease annotation.
+Disagreement does not mark clinical difficulty. In contrast to DMS, misclassified clinical variants have lower disagreement than correctly classified ones (median 0.662 vs 0.693; 41.4% of proteins with higher D in misclassified; (figure 6(b)), and pathogenic vs benign variants show no disagreement difference (0.693 vs 0.690). The disagreement-error association is therefore domain-specific: a weak signal detectable in well-posed fitness landscapes that does not generalize to heterogeneous disease annotation.
 
 ### 2.8 BioGate on DMS: a transparent negative
 
-A softmax-gated ensemble ("BioGate"; one 32-unit hidden layer) weighting the three percentile-space family centroids from context features (pLDDT, position, length, MSA depth, functional annotations), evaluated by 5-fold UniProt-grouped CV, did not beat uniform averaging: median protein-level rho 0.551 vs 0.542, while the median within-protein paired difference was 0.000 (bootstrap 95% CI -0.008 to +0.008); the two summaries differ because the median of a difference is not the difference of medians (Supplementary figure S4) (Table 4). XGBoost ablations show context does add signal (scores-only 0.509, with context 0.551 under the per-fold-median aggregation of Table S5; 0.573 under the pooled aggregation of Table 4), but the constrained convex-mixture gate cannot exploit it. BioGate is a constraint result: with a per-variant uncertainty signal this weak, gating cannot improve point prediction (details in Supplementary figures S4-S6).
+A softmax-gated ensemble ("BioGate"; one 32-unit hidden layer) weighting the three percentile-space family centroids from context features (pLDDT, position, length, MSA depth, functional annotations), evaluated by 5-fold UniProt-grouped CV, did not beat uniform averaging: median protein-level rho 0.551 vs 0.542, while the median within-protein paired difference was 0.000 (bootstrap 95% CI -0.008 to +0.008); the two summaries differ because the median of a difference is not the difference of medians (Supplementary figure S4) (Table 4). XGBoost ablations show context does add signal (scores-only 0.509, with context 0.551 under the per-fold-median aggregation of Table S5; 0.573 under the pooled aggregation of Table 4; context-feature ablation in figure S5), but the constrained convex-mixture gate cannot exploit it. BioGate is a constraint result: with a per-variant uncertainty signal this weak, gating cannot improve point prediction (details in Supplementary figures S4-S6).
 
 ### 2.9 The uncertainty read-out is scale-dependent (methodological note)
 
@@ -116,11 +116,13 @@ Disagreement-based uncertainty is not invariant to monotonic score transformatio
 
 ### 3.0 Related work and positioning
 
-(i) Meta-predictors and integrative scores (MetaSVM/MetaLR [17], ClinPred [18], BayesDel (distributed within the PERCH framework) [19], REVEL [35], CADD [36]) combine evolutionary, conservation and structural features through fitted or heuristic weights applied uniformly across variants; they cannot answer where and why predictor trust should differ across the mutational landscape. Our contribution is the quantitative description of the biology of disagreement itself, and the demonstration that relative family expertise is context-dependent only in a limited sense: single-sequence models lose relative advantage in curated disorder, while no expertise gradient exists along the structural-confidence axis (Section 2.5).
+(i) Meta-predictors and integrative scores (MetaSVM/MetaLR [17], ClinPred [18], BayesDel (distributed within the PERCH framework) [19], REVEL [35], CADD [36]) use globally trained mappings or integrative scoring functions that combine multiple annotations or component predictors for variant-level prediction; their goal is predictive integration, whereas ours is to characterize context-dependent inter-model divergence -- they cannot answer where and why predictor trust should differ across the mutational landscape. Our contribution is the quantitative description of the biology of disagreement itself, and the demonstration that relative family expertise is context-dependent only in a limited sense: single-sequence models lose relative advantage in curated disorder, while no expertise gradient exists along the structural-confidence axis (Section 2.5).
 
-(ii) Model disagreement as uncertainty in ML (deep ensembles [20], Bayesian approximations, active learning [21]). We confirm a weak uncertainty signal in DMS (Section 2.6) but show it is domain-specific (Section 2.7) and, more importantly, that disagreement carries a reproducible biological structure (Sections 2.2-2.5) that generic uncertainty theory neither predicts nor explains.
+(ii) Model disagreement as uncertainty in ML (deep ensembles [20], Bayesian approximations, active learning [21]; embedding-level uncertainty for single protein language models [59]). We confirm a weak uncertainty signal in DMS (Section 2.6) but show it is domain-specific (Section 2.7) and, more importantly, that disagreement carries a reproducible biological structure (Sections 2.2-2.5) that generic uncertainty theory neither predicts nor explains.
 
-(iii) The ProteinGym benchmark [1] reports average per-model performance. Our analysis is not a benchmark: the 40-model panel is an instrument, every reported quantity is a residue-level property of the landscape, and we surface a methodological caveat absent from benchmark practice -- the disagreement scale (u vs z) changes the disagreement-error association ~4.5x, so future disagreement analyses must pre-specify their scale.
+(iii) The ProteinGym benchmark [1] reports average per-model performance. Our analysis is not a benchmark: the 40-model panel is used as an instrument to derive landscape-level observables -- assay-level correlations, residue-level associations, variant-level regimes and protein-level clinical transfer -- with the primary structural-confidence analysis performed at residue level. We additionally surface a methodological caveat absent from benchmark practice: the disagreement scale (u vs z) changes the disagreement-error association ~4.5x, so future disagreement analyses must pre-specify their scale.
+
+(iv) Predictor-versus-experiment discordance. Livesey and Marsh [58] dissect where and why individual variant effect predictors disagree with multiplexed assays of human proteins, showing that discordance is systematic rather than random -- shaped by burial, bulky hydrophobic positions, disorder and assay mechanism. That question is predictor-versus-experiment; ours is disagreement internal to the computational model ecosystem itself (model family versus model family), asked across 217 assays and 40 predictors and tied to a structural-confidence axis the predictors share but do not report. The two framings are complementary and neither subsumes the other.
 
 ### 3.1 Disagreement as a probe of prediction-space divergence
 
@@ -154,26 +156,26 @@ Score coverage and missingness. All 696,311 retained variants had complete score
 Per assay and per model: percentile rank -> u (deleterosity orientation; u = 1 - rank since higher released score = fitness) -> z = Phi^-1(clip(u, 0.001, 0.999)). Y = 1 - rank(DMS_score) within assay (higher Y = more damaged; Y on the 0-1 scale).
 
 Two family-centroid spaces are used for distinct purposes:
-$$Z_{{\mathrm{{fam}},i}}=\frac{{1}}{{|F|}}\sum_{{m\in F}}z_{{im}}\quad\text{{(z-space; regime clustering and Table 1)}}$$
+$$Z_{\mathrm{{fam}},i}=\frac{{1}}{{\lvert F\rvert}}\sum_{{m\in F}}z_{{im}}$$
 
-$$U_{{\mathrm{{fam}},i}}=\frac{{1}}{{|F|}}\sum_{{m\in F}}u_{{im}}\quad\text{{(percentile space; accuracy, advantage, BioGate)}}$$
+$$U_{\mathrm{{fam}},i}=\frac{{1}}{{\lvert F\rvert}}\sum_{{m\in F}}u_{{im}}$$
 
 All accuracy comparisons and predictions (family ensembles, errors, gating)
 are therefore computed in the percentile space, so that predictions and
 outcomes share the same 0-1 scale.
 
 Primary quantities (explicit definitions):
-$$D_\mathrm{std},i=\sqrt{{\frac{{1}}{{M}}\sum_m (z_{{im}}-\bar z_i)^2}}$$
+$$D_{\mathrm{{std}},i}=\sqrt{{\frac{{1}}{{M}}\sum_{{m}}\lvert z_{{im}}-\bar{{z}}_{{i}}\rvert^{{2}}}}$$
 
-$$D_\mathrm{{MAD}},i=\mathrm{{median}}_m|z_{{im}}-\mathrm{{median}}_m z_i|$$
+$$D_{\mathrm{{MAD}},i}=\mathrm{{median}}_{{m}}\,\lvert z_{{im}}-\mathrm{{median}}_{{m}}\,z_{{im}}\rvert$$
 
-$$D_u,i=\mathrm{{SD}}_m(u_{{im}})$$
+$$D_{\mathrm{{u}},i}=\mathrm{{SD}}_{{m}}\!\left(u_{{im}}\right)$$
 
-$$D_\mathrm{{pair}},i=\frac{{2}}{{M(M-1)}}\sum_{{m<k}}|z_{{im}}-z_{{ik}}|$$
+$$D_{\mathrm{{pair}},i}=\frac{{2}}{{M(M-1)}}\sum_{{m<k}}\lvert z_{{im}}-z_{{ik}}\rvert$$
 
-$$D_{{\mathrm{{evo}}\text{{-}}\mathrm{{struct}},i}}=|U_{{\mathrm{{evolution}},i}}-U_{{\mathrm{{structure}},i}}|$$
+$$D_{\mathrm{{evo\text{-}struct}},i}=\lvert U_{\mathrm{{evolution}},i}-U_{\mathrm{{structure}},i}\rvert$$
 
-$$S_{{\mathrm{{ens}},i}}=\frac{{1}}{{3}}\sum_f U_{{f,i}},\qquad \mathrm{{error}}_i=|S_{{\mathrm{{ens}},i}}-Y_i|$$
+$$S_{\mathrm{{ens}},i}=\frac{{1}}{{3}}\sum_{{f}}U_{{f,i}},\qquad \mathrm{{error}}_{{i}}=\lvert S_{\mathrm{{ens}},i}-Y_{{i}}\rvert$$
 
 Four disagreement definitions are used (D_std, D_u, D_MAD, D_pair); a fifth
 candidate (variance of per-variant ranks) is mathematically redundant with
@@ -185,10 +187,10 @@ because z stretches tails where models agree; the z scale is primary and u
 reported as sensitivity (Section 2.9).
 
 ### 4.4 Statistics
-Primary pLDDT analysis: residue-level Spearman per protein, aggregated by median; protein-level bootstrap (2,000) confidence intervals; one-sample Wilcoxon test; four disagreement definitions; protein-fixed-effects regression (within-protein demeaning, protein-clustered standard errors) adjusting for disorder, contact density, secondary structure, position and MSA depth (Table S2). Cross-assay summaries aggregate per-protein effects; UniProt-level cluster bootstrap (10,000) [51]. GO/NO-GO thresholds were fixed in the versioned project configuration before the confirmatory analyses (config.yaml; not a public registry). Within-protein permutation enrichment with Benjamini-Hochberg FDR control [52]. Regime clustering: Gaussian mixtures K = 2-8 by BIC [53]; K-robustness reported (K = 4-7, adjusted Rand index); experimental replication evaluated as regime-level Y correlation across independent assays of the same protein. BioGate: torch [49] CPU MLP gating, 5-fold GroupKFold by UniProt; baselines best single expert (train-selected), uniform ensemble, Ridge stacking, XGBoost [25] (scores-only / context-only / scores+context ablations); paired protein-level bootstrap (2,000) [51]. Clinical transfer: a separate two-expert gate (sequence + evolution, the only families in the clinical score files) was trained exclusively on DMS, frozen, and applied once to the clinical benchmark; no clinical label was used in any model selection; per-protein AUROC; strict non-overlap set by >= 70% sequence identity (8-mer filter + alignment; 30% / 50% / 70% sensitivity in Table S4) excluding 35 clinical proteins. Software: Python ecosystem (numpy [44], scipy [45], pandas [47], scikit-learn [43], statsmodels [48], matplotlib [46]), Biopython [24], PyTorch [49], pydssp [50]; transformer architectures follow Vaswani et al. [42].
+Primary pLDDT analysis: residue-level Spearman per protein, aggregated by median; protein-level bootstrap (2,000) confidence intervals; one-sample Wilcoxon test; four disagreement definitions; protein-fixed-effects regression (within-protein demeaning, protein-clustered standard errors) adjusting for disorder, contact density, secondary structure, position and MSA depth (Table S2). Cross-assay summaries aggregate per-protein effects; UniProt-level cluster bootstrap (10,000) [51]. GO/NO-GO thresholds were fixed in the versioned project configuration before the confirmatory analyses (config.yaml; not a public registry). Within-protein permutation enrichment with Benjamini-Hochberg FDR control [52]. Regime clustering: Gaussian mixtures K = 2-8 by BIC [53]; K-robustness reported (K = 4-7, adjusted Rand index); experimental replication evaluated as regime-level Y correlation across independent assays of the same protein. BioGate: torch [49] CPU MLP gating, 5-fold GroupKFold by UniProt; baselines best single expert (train-selected), uniform ensemble, Ridge stacking, XGBoost [25] (scores-only / context-only / scores+context ablations); paired protein-level bootstrap (2,000) [51]. Clinical transfer: a separate two-expert gate (sequence + evolution, the only families in the clinical score files) was trained exclusively on DMS, frozen, and applied once to the clinical benchmark; no clinical labels were used to train, tune or select the transfer gate -- the best-single baseline is a post hoc descriptive oracle comparator, re-selected within each evaluation set, that never enters the gating procedure; per-protein AUROC; strict non-overlap set by >= 70% sequence identity, computed as the full-length sequence-similarity ratio after an 8-mer overlap prefilter (>= 25% shared 8-mers; not an aligned-region identity; 30% / 50% / 70% sensitivity in Table S4). The maximum-identity distribution is strongly bimodal (2,490 clinical proteins below 0.05, 35 at or above 0.80), so the same 35 proteins are excluded at every threshold between 0.3 and 0.7: these thresholds are consistency checks, not a graded homology control. Software: Python ecosystem (numpy [44], scipy [45], pandas [47], scikit-learn [43], statsmodels [48], matplotlib [46]), Biopython [24], PyTorch [49], pydssp [50] (DSSP [60]); transformer architectures follow Vaswani et al. [42].
 
 ### 4.5 Structural, mechanical and disorder annotation
-pLDDT from ProteinGym AlphaFold2 PDBs (B-factor, best chain; 99.0% of variants mapped; two proteins with < 50% alignment flagged and excluded from pLDDT analyses). AlphaFold2 structures and confidence scores are those of Jumper et al. [15]. pydssp secondary structure (H/E/C) and CA contact density (8/10 A) from the same PDBs; burial tertiles within protein. UniProt features (active site, binding site, domain, transmembrane, modified residue, disulfide, region, motif) and curated disordered regions fetched via the UniProt REST API [22] and transferred to DMS coordinates by sequence alignment (Needleman-Wunsch global alignment, Biopython PairwiseAligner; mean per-protein coverage 0.999 and identity 0.993; 179 proteins mapped; 65,420 positions agree with the original heuristic matcher at 99.92%, and IDR mapping quality is reported per protein in mapping_quality.csv; 44,708 annotations transferred; 4,569 disordered positions across 92 proteins). The clinical benchmark labels derive from ClinVar curation [23]. Case-study proteins (TP53, BRCA1, PTEN; figure 4(b)-(d)) were selected a priori as clinically prominent proteins with dense DMS coverage (>1,000 mutations each), high-quality structures, and broad pLDDT coverage; they are illustrative rather than exhaustive.
+pLDDT from ProteinGym AlphaFold2 PDBs (B-factor, best chain; 99.0% of variants mapped; two proteins with < 50% alignment flagged and excluded from pLDDT analyses). AlphaFold2 structures and confidence scores are those of Jumper et al. [15]. pydssp secondary structure (H/E/C; DSSP algorithm [60]) and CA contact density (8/10 A) from the same PDBs; burial tertiles within protein. UniProt features (active site, binding site, domain, transmembrane, modified residue, disulfide, region, motif) and curated disordered regions fetched via the UniProt REST API [22] and transferred to DMS coordinates by sequence alignment (Needleman-Wunsch global alignment, Biopython PairwiseAligner; mean per-protein coverage 0.999 and identity 0.993; 179 proteins mapped; 65,420 positions agree with the original heuristic matcher at 99.92%, and IDR mapping quality is reported per protein in mapping_quality.csv; 44,708 annotations transferred; 4,569 disordered positions across 92 proteins). The clinical benchmark labels derive from ClinVar curation [23]. Case-study proteins (TP53, BRCA1, PTEN; figure 4(b)-(d)) were selected a priori as clinically prominent proteins with dense DMS coverage (>1,000 mutations each), high-quality structures, and broad pLDDT coverage; they are illustrative rather than exhaustive.
 
 ### 4.6 Reproducibility
 Seed 2026; every figure has a machine-readable source table; all scripts log inputs/outputs/counts/runtime; `python src/16_make_figures.py` recreates all main figures from results/.
@@ -213,7 +215,7 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [10] Rao R, Liu J, Verkuil R, Meier J, Canny J, Abbeel P, Sercu T and Rives A 2021 MSA Transformer Proc. 38th Int. Conf. on Machine Learning (ICML)
 [11] Su J, Han C, Zhou Y, Shan J, Zhou X and Yuan F 2024 SaProt: protein language modeling with structure-aware vocabulary Int. Conf. on Learning Representations (ICLR)
 [12] Hayes T et al 2025 Simulating 500 million years of evolution with a language model Science 387 850-8
-[13] Bhatnagar A, Jain S, Beazer J et al 2025 Scaling unlocks broader generation and deeper functional understanding of proteins bioRxiv 2025.04.15.649055
+[13] Bhatnagar A, Jain S, Beazer J et al 2025 Scaling unlocks broader generation and deeper functional understanding of proteins Proc. Adv. Neural Inf. Process. Syst. (NeurIPS 2025) Main Conference
 [14] Chen B et al 2023 xTrimoPGLM: unified 100B-scale pre-trained transformer for deciphering the language of proteins bioRxiv 2023.07.05.547496
 [15] Jumper J et al 2021 Highly accurate protein structure prediction with AlphaFold Nature 596 583-9
 [16] Piovesan D, Monzon A M and Tosatto S C E 2022 Intrinsic protein disorder and conditional folding in AlphaFoldDB Protein Sci. 31 e4466
@@ -231,7 +233,7 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [28] Tsuboyama K et al 2023 Mega-scale experimental analysis of protein folding stability in biology and design Nature 620 434-44
 [29] Rives A et al 2021 Biological structure and function emerge from scaling unsupervised learning to 250 million protein sequences Proc. Natl Acad. Sci. USA 118 e2016239118
 [30] Elnaggar A et al 2022 ProtTrans: toward understanding the language of life through self-supervised learning IEEE Trans. Pattern Anal. Mach. Intell. 44 7112-27
-[31] Nijkamp E, Ruffolo J A, Weinstein E N, Naik N and Madani A 2023 ProGen2: exploring the boundaries of protein language models Cell Systems 14 968-978
+[31] Nijkamp E, Ruffolo J A, Weinstein E N, Naik N and Madani A 2023 ProGen2: exploring the boundaries of protein language models Cell Systems 14 968-978.e3
 [32] Madani A et al 2023 Large language models generate functional protein sequences across diverse families Nat. Biotechnol. 41 1099-106
 [33] Hopf T A et al 2017 Mutation effects predicted from sequence co-variation Nat. Biotechnol. 35 128-35
 [34] Cheng J et al 2023 Accurate proteome-wide missense variant effect prediction with AlphaMissense Science 381 eadg7492
@@ -249,13 +251,16 @@ All data are public (ProteinGym v1.3, DOI 10.5281/zenodo.15293562; UniProt). All
 [47] McKinney W 2010 Data structures for statistical computing in Python Proc. 9th Python in Science Conf.
 [48] Seabold S and Perktold J 2010 statsmodels: econometric and statistical modeling with python Proc. 9th Python in Science Conf.
 [49] Paszke A et al 2019 PyTorch: an imperative style, high-performance deep learning library Adv. Neural Inf. Process. Syst. 32
-[50] Thomas D pydssp: a fast secondary structure assigner for protein structures https://github.com/continuum-continuum/pydssp (accessed 2026)
+[50] Minami S 2024 PyDSSP: a simplified implementation of the DSSP algorithm for PyTorch and NumPy https://github.com/ShintaroMinami/PyDSSP (accessed 2026)
 [51] Efron B and Tibshirani R J 1993 An Introduction to the Bootstrap (New York: Chapman and Hall)
 [52] Benjamini Y and Hochberg Y 1995 Controlling the false discovery rate: a practical and powerful approach to multiple testing J. R. Stat. Soc. B 57 289-300
 [53] Schwarz G 1978 Estimating the dimension of a model Ann. Stat. 6 461-4
 [54] Gitter laboratory benchmarking structure-based models on ProteinGym https://github.com/gitter-lab/benchmarking-structure-based-models (accessed 2026)
-[56] Sharma A and Gitter A 2025 Exploring zero-shot structure-based protein fitness prediction Proc. ICLR Workshop on Generative and Experimental Perspectives for Biomolecular Design; experimental-structure scores at Zenodo 10.5281/zenodo.13821399
+[56] Sharma A and Gitter A 2025 Exploring zero-shot structure-based protein fitness prediction Proc. ICLR Workshop on Generative and Experimental Perspectives for Biomolecular Design; experimental-structure scores at Zenodo 10.5281/zenodo.13819824
 [57] Blaabjerg L M, Jonsson N, Boomsma W, Stein A and Lindorff-Larsen K 2024 SSEmb: a joint embedding of protein sequence and structure enables robust variant effect predictions Nat. Commun. 15 9646
+[58] Livesey B J and Marsh J A 2026 Why variant effect predictors and multiplexed assays agree and disagree Nat. Commun. 17 77211
+[59] Prabakaran R and Bromberg Y 2026 Quantifying uncertainty in protein representations across models and tasks Nat. Methods 23 796-804
+[60] Kabsch W and Sander C 1983 Dictionary of protein secondary structure: pattern recognition of hydrogen-bonded and geometrical features Biopolymers 22 2577-637
 
 ## Figure captions
 Figure 1. Protein AI model prediction landscape. (a) workflow and (b) dataset composition; (c) PCA of the variant-by-model prediction matrix; (d) median assay-level Spearman correlation heatmap; (e) hierarchical clustering of models by prediction correlation.
@@ -268,7 +273,7 @@ Supplementary figures: S1 disagreement-error distribution; S2 disagreement decil
 
 ## Table captions
 
-Tables 1-4 are main-text tables; Tables S1-S8 are supplementary.
+Tables 1-4 are main-text tables; Tables S1-S9 are supplementary.
 
 **Table 1. Disagreement regimes (GMM, K = 6).** Family centroids are z-scale
 means; Y = experimental deleteriousness (1 - DMS rank; 0 = tolerated,
@@ -323,19 +328,31 @@ median 1.84 (CI 1.62-2.04), pooled 1.49 (CI 1.35-1.65).
 **Table S2. Confound controls for the shared AlphaFold input.** (i)
 Asymmetry: residue-level rho(seq-vs-struct, pLDDT) = +0.01 vs
 rho(evo-vs-struct, pLDDT) = -0.04 (65% of proteins in the evo-struct
-direction); (ii) structure-model DMS correlation by pLDDT bin (ESM-IF1:
-0.04 at <50, 0.47 at >=90; MIF: 0.03 vs 0.43; ProteinMPNN: 0.01 vs 0.22);
-(iii) structure-model score coverage = 100% at all pLDDT levels.
+direction); (ii) structure-model DMS association as median |Spearman rho| with the
+DMS fitness score (released structure scores are oriented toward
+deleteriousness, so signed correlations are negative; absolute values
+are used here and in panel (ii) of Table S2): ESM-IF1 0.04 at <50 vs
+0.47 at >=90; MIF 0.03 vs 0.43; ProteinMPNN 0.01 vs 0.22;
+(iii) structure-model score coverage = 100% at all pLDDT levels;
+(iv) protein-fixed-effects regression of residue-level
+evo-vs-structure disagreement on pLDDT, adjusted for disorder, contact
+density, secondary structure, normalized position, MSA depth and
+structure coverage, with protein-clustered standard errors.
 
 **Table S3. Regime robustness across K = 4-7.** Consensus regimes track
 experimental Y at every K (Y_tolerant 0.26-0.30; Y_damaging 0.73-0.79);
-cross-assay position-level agreement 0.75-0.84 at every K; the
-structure-dissenting pattern emerges at K >= 6; ARI vs K = 6: 0.35 (K = 4),
+cross-assay position-level agreement 0.75-0.84 at every K (pair
+count 30 at every K, using assay pairs with >= 20 shared positions; the
+phenotype-replication criterion of Section 2.4 -- >= 3 regimes with
+>= 20 variants -- yields 37 pairs); the structure-dissenting pattern emerges at K >= 6; ARI vs K = 6: 0.35 (K = 4),
 0.58 (K = 5), 0.46 (K = 7).
 
 **Table S4. Identity-threshold sensitivity.** 30% / 50% / 70% each exclude
 the same 35 clinical proteins; uniform AUROC 0.905 (n = 2,490) in all
-three settings.
+three settings. The maximum-identity distribution is strongly bimodal
+(2,490 proteins < 0.05; 35 at >= 0.80), so thresholds between 0.3 and
+0.7 select the identical set; this table is a consistency check, not a
+graded homology control.
 
 **Table S5. XGBoost ablations (5-fold UniProt-grouped CV, percentile
 space; median of per-fold medians).** scores only 0.509; context only 0.167; scores + context 0.551;
@@ -354,7 +371,15 @@ uniform +0.085 [0.077, 0.091], best - BioGate +0.061 [0.056, 0.066].
 Spearman 0.94 (IQR 0.89-1.00, 100% positive, 185 proteins); dissenting
 regime held-out Y median 0.61, damaging in 72% of supported proteins;
 cross-assay replication on held-out proteins median 0.94 (28 pairs,
-100% above chance)."""
+100% above chance).
+
+**Table S9. Regime-selection audit and functional-feature controls.**
+(a) Gaussian-mixture BIC sweep over K = 2-8 (family-centroid input,
+covariance_type = full, n_init = 3, identical settings to the regime fit);
+K = 6 minimizes BIC. (b) Within-protein permutation enrichment of
+high-disagreement residues for UniProt functional features with
+Benjamini-Hochberg FDR control across features; no feature survives
+(minimum q = 0.60)."""
 
 # write markdown version
 md = (f"# {TITLE}\n\n"
@@ -442,7 +467,7 @@ and stated as the primary limitation.
 aggregation is protein-level with bootstrap inference, and all numbers are
 reproducible from public data and code (ProteinGym v1.3). A separate
 Supplementary Information file contains Figures S1-S11 (one per page) and
-Tables S1-S8; main-text Tables 1-4 are typeset in the manuscript and main
+Tables S1-S9; main-text Tables 1-4 are typeset in the manuscript and main
 Figures 1-6 appear on their own pages at the end of the manuscript file.
 
 The manuscript is original, has not been published or submitted elsewhere,
@@ -496,12 +521,7 @@ doc.add_paragraph("Keywords: " + ", ".join(KEYWORDS)).bold = True
 
 
 def _beautify_equation(text):
-    return (text
-            .replace("sqrt(", "\u221a(")
-            .replace("*", "\u00b7")
-            .replace("Phi^-1", "\u03a6\u207b\u00b9")
-            .replace("sum_m", "\u03a3_m")
-            .replace("sum_{m<k}", "\u03a3_{m<k}"))
+    return text
 
 
 def add_rich_paragraph(doc, text, bold=False, center=False):

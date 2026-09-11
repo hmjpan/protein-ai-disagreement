@@ -1,49 +1,56 @@
-# Protein AI Model Disagreement Tracks AlphaFold Structural Confidence
+# Protein AI Disagreement: Revealing Hidden Biological Regimes of Missense Variation
 
-Analysis code, results tables and figures for the manuscript
-*"Protein AI Model Disagreement Tracks AlphaFold Structural Confidence"*.
+Scientific question: **Why do different protein AI models disagree on the same
+amino-acid substitution, and does this disagreement carry biological
+structure?**
 
-Every figure in the manuscript has a machine-readable source table under
-`results/`, and all analyses run from public data with fixed settings recorded
-in `config.yaml`.
+This is a *discovery-driven* (not benchmark) study. The pipeline is designed so
+that hypotheses are tested, not retrofitted. See `config.yaml` for all
+pre-registered thresholds.
 
-## Data dependencies (all public)
+## Pipeline (Phase 1)
 
-1. **ProteinGym v1.3** -- https://doi.org/10.5281/zenodo.15293562
-   DMS substitution assays, precomputed zero-shot model scores, the clinical
-   benchmark, and AlphaFold2 structure files. Downloaded by `src/01_download_data.py`.
-2. **UniProt REST API** -- features and curated disordered regions
-   (`src/09_structure_annotations.py`, `src/36_aligner_mapping.py`).
-3. **Gitter-lab experimental-structure benchmark** --
-   https://doi.org/10.5281/zenodo.13821399 and
-   https://github.com/gitter-lab/benchmarking-structure-based-models
-   (ESM-IF1 scores on experimental structures; SSEmb scores) used by
-   `src/35_expstruct_control.py`.
+| Script | Purpose | Key outputs |
+|---|---|---|
+| `01_download_data.py` | verify data integrity, fetch official model score directions | `MANIFEST.md`, `model_direction.csv` |
+| `02_inventory_data.py` | assay / model / coverage inventories | `TableS1/S2/S3` |
+| `03_parse_dms.py` | parse assays, flag single substitutions & sequence mismatches | `processed_single_mutations.parquet` |
+| `04_merge_model_scores.py` | merge zero-shot model scores | `merged_scores_wide.parquet` |
+| `05_quality_control.py` | QC + core model panel selection | `model_panel.csv`, `panel_scores.parquet`, `QC_report.md` |
+| `06_normalize_scores.py` | per-assay rank normalization, direction alignment | `normalized_scores.parquet` |
+| `07_compute_disagreement.py` | D_std / D_MAD / family disagreement | `disagreement_scores.parquet`, `TableS4` |
 
-## Layout
+## Hard rules (non-negotiable)
 
-```
-src/            numbered pipeline scripts (01-37); run in numeric order
-config.yaml     fixed analysis settings (seed, panels, thresholds, QC rules)
-results/        every table/CSV/parquet behind each figure and statistic
-figures/        main (Fig1-Fig6) and supplementary (FigS1-FigS11) panels
-manuscript/     submission-ready manuscript, cover letter, figure list
-logs/           run logs of the pipeline
-requirements.txt
-```
+1. No fabricated numbers. Every figure must have a machine-readable source table.
+2. No direction inference from DMS labels (official configs only).
+3. Protein-level (UniProt) splits only; no random mutation splits.
+4. AlphaFold low-pLDDT != intrinsically disordered region (wording rule).
+5. Association != causation (wording rule).
+6. Negative results are reported, never deleted.
+7. GO/NO-GO checkpoints are evaluated against `config.yaml` thresholds.
 
-## Reproducing the analysis
+## Data provenance
+
+- ProteinGym v1.3 (OATML-Markslab), DOI: 10.5281/zenodo.15293562
+- DMS substitutions: 217 assays / ~2.7M variants
+- Clinical substitutions: 2,525 proteins / ~63K variants
+- All downloads from `https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/`
+
+## Reproduction
 
 ```bash
-pip install -r requirements.txt
-python src/01_download_data.py      # downloads public data (large)
-for s in src/0[2-9]_*.py src/1?_*.py src/2?_*.py src/3?_*.py; do python "$s"; done
+python src/01_download_data.py
+python src/02_inventory_data.py
+python src/03_parse_dms.py
+python src/04_merge_model_scores.py
+python src/05_quality_control.py
+python src/06_normalize_scores.py
+python src/07_compute_disagreement.py
 ```
 
-The confirmatory analysis plan and GO/NO-GO thresholds are recorded in
-`config.yaml`, which was fixed before the final analyses.
-
-## License
-
-MIT (see `LICENSE`). Third-party data remain subject to their original terms
-(ProteinGym Zenodo record; UniProt and ClinVar terms of use).
+All scripts log inputs/outputs/counts/runtime to `logs/`.
+## Current manuscript status
+- Analysis scripts: src/01-src/27 (01-07 Phase 1; 08-16 main analyses; 17-26 review-response enhancements; 27 panel residue-level verification)
+- Submission package (v1.2): manuscript/submission/ (manuscript.md, manuscript.docx, cover_letter.md)
+- Figures: 20 main + 9 supplementary, all regenerable via src/16_make_figures.py
