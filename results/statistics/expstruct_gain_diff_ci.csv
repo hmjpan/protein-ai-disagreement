@@ -1,0 +1,2 @@
+metric,median_diff,ci_low,ci_high,mwu_p,n_low,n_high
+expstruct_gain_diff_low_minus_high,-0.0583412500510327,-0.09891501736414268,-0.013128158488035589,0.010531460201467452,32,32

@@ -1,0 +1,33 @@
+[2026-09-06 20:01:34] core panel loaded: 40 models
+[2026-09-06 20:01:34] rows: 696311; structure models: ['MIF', 'ESM-IF1', 'ProteinMPNN']
+[2026-09-06 20:01:36] Control 1: n_proteins = 154
+[2026-09-06 20:01:36]   rho_evo_struct median = -0.0415 (frac neg 0.675)
+[2026-09-06 20:01:36]   rho_seq_struct median = +0.0111 (frac neg 0.474)
+[2026-09-06 20:01:36]   asymmetry (evo-struct minus seq-struct) median = -0.0294
+[2026-09-06 20:01:38] Control 2: structure-model DMS correlation by pLDDT bin
+[2026-09-06 20:01:38]   MIF @ pLDDT<50: median rho(DMS) = -0.0322
+[2026-09-06 20:01:38]   ESM-IF1 @ pLDDT<50: median rho(DMS) = -0.0366
+[2026-09-06 20:01:38]   ProteinMPNN @ pLDDT<50: median rho(DMS) = -0.0068
+[2026-09-06 20:01:38]   MIF @ 50-70: median rho(DMS) = -0.1228
+[2026-09-06 20:01:38]   ESM-IF1 @ 50-70: median rho(DMS) = -0.1162
+[2026-09-06 20:01:38]   ProteinMPNN @ 50-70: median rho(DMS) = -0.0541
+[2026-09-06 20:01:38]   MIF @ 70-90: median rho(DMS) = -0.2627
+[2026-09-06 20:01:38]   ESM-IF1 @ 70-90: median rho(DMS) = -0.3167
+[2026-09-06 20:01:38]   ProteinMPNN @ 70-90: median rho(DMS) = -0.1420
+[2026-09-06 20:01:38]   MIF @ >=90: median rho(DMS) = -0.4327
+[2026-09-06 20:01:38]   ESM-IF1 @ >=90: median rho(DMS) = -0.4740
+[2026-09-06 20:01:38]   ProteinMPNN @ >=90: median rho(DMS) = -0.2246
+[2026-09-06 20:01:38] Control 3: structure-model coverage by pLDDT bin
+[2026-09-06 20:01:38]   MIF @ pLDDT<50: coverage = 1.0000
+[2026-09-06 20:01:38]   ESM-IF1 @ pLDDT<50: coverage = 1.0000
+[2026-09-06 20:01:38]   ProteinMPNN @ pLDDT<50: coverage = 1.0000
+[2026-09-06 20:01:38]   MIF @ 50-70: coverage = 1.0000
+[2026-09-06 20:01:38]   ESM-IF1 @ 50-70: coverage = 1.0000
+[2026-09-06 20:01:38]   ProteinMPNN @ 50-70: coverage = 1.0000
+[2026-09-06 20:01:38]   MIF @ 70-90: coverage = 1.0000
+[2026-09-06 20:01:38]   ESM-IF1 @ 70-90: coverage = 1.0000
+[2026-09-06 20:01:38]   ProteinMPNN @ 70-90: coverage = 1.0000
+[2026-09-06 20:01:38]   MIF @ >=90: coverage = 1.0000
+[2026-09-06 20:01:38]   ESM-IF1 @ >=90: coverage = 1.0000
+[2026-09-06 20:01:38]   ProteinMPNN @ >=90: coverage = 1.0000
+[2026-09-06 20:01:40] elapsed_seconds=25.6

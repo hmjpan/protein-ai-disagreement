@@ -1,0 +1,2 @@
+n_proteins,median_rho_train_profile,q25_rho,q75_rho,frac_rho_positive,dissenting_Y_median_heldout,frac_dissenting_Y_gt05,heldout_crossassay_rho_median,heldout_crossassay_n_pairs,frac_pairs_above_chance
+185,0.942857142857143,0.8857142857142858,1.0,1.0,0.6092668711007703,0.7243243243243244,0.942857142857143,28,1.0

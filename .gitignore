@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+data/
+*.zip
+*.lock
+~$*
+
+# manuscript files are not distributed with the code
+manuscript/
+*.docx
+*.pdf

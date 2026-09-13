@@ -1,0 +1,21 @@
+[2026-08-29 20:15:52] proteins with UniProt disordered regions: 92
+[2026-08-29 20:15:55] disordered positions mapped to DMS coordinates: 4569
+[2026-08-29 20:15:56] UniProt disorder rate: 0.039; pLDDT<50 rate: 0.061
+[2026-08-29 20:15:56] overlap: P(pLDDT<50 | UniProt disorder)=0.562; P(disorder | pLDDT<50)=0.357
+[2026-08-29 20:15:56] D_evo_struct: median IDR-ordered diff = -0.0171 (34 proteins; frac positive 0.382)
+[2026-08-29 20:15:56] D_seq_struct: median IDR-ordered diff = -0.0120 (34 proteins; frac positive 0.471)
+[2026-08-29 20:15:56] D_std: median IDR-ordered diff = +0.0401 (34 proteins; frac positive 0.765)
+[2026-08-29 20:15:58]   seq @ IDR: adv=-0.0432 (frac_pos 0.38, n=26852)
+[2026-08-29 20:15:58]   seq @ ordered: adv=+0.0379 (frac_pos 0.88, n=669459)
+[2026-08-29 20:15:58]   seq @ lowconf: adv=+0.0081 (frac_pos 0.52, n=42273)
+[2026-08-29 20:15:58]   seq @ highconf: adv=+0.0375 (frac_pos 0.89, n=654038)
+[2026-08-29 20:15:58]   evo @ IDR: adv=+0.0156 (frac_pos 0.54, n=26852)
+[2026-08-29 20:15:58]   evo @ ordered: adv=-0.0105 (frac_pos 0.37, n=669459)
+[2026-08-29 20:15:58]   evo @ lowconf: adv=+0.0873 (frac_pos 0.62, n=42273)
+[2026-08-29 20:15:58]   evo @ highconf: adv=-0.0146 (frac_pos 0.39, n=654038)
+[2026-08-29 20:15:58]   struct @ IDR: adv=+0.0604 (frac_pos 0.70, n=26852)
+[2026-08-29 20:15:58]   struct @ ordered: adv=+0.0052 (frac_pos 0.58, n=669459)
+[2026-08-29 20:15:58]   struct @ lowconf: adv=-0.1039 (frac_pos 0.41, n=42273)
+[2026-08-29 20:15:58]   struct @ highconf: adv=+0.0065 (frac_pos 0.58, n=654038)
+[2026-08-29 20:15:58] figures written: Fig6C
+[2026-08-29 20:15:58] elapsed_seconds=7.7

@@ -1,0 +1,4 @@
+metric,value,ci_low,ci_high,n
+median held-out regime-profile Spearman (all regimes),0.942857142857143,0.8857142857142858,1.0,185
+median held-out Spearman excluding the two consensus regimes,0.7999999999999999,0.6000000000000001,1.0,185
+fraction of proteins positive (no-consensus),0.8702702702702703,,,185

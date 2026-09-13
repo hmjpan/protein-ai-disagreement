@@ -1,0 +1,5 @@
+[2026-09-06 20:59:35] residue-level rows: 37187; proteins: 185
+[2026-09-06 20:59:36] pLDDT only: beta_pLDDT = -0.00122 (SE 0.00043, p = 4.78e-03, r2 = 0.0024)
+[2026-09-06 20:59:36] full covariates: beta_pLDDT = -0.00182 (SE 0.00054, p = 7.84e-04, r2 = 0.0056)
+[2026-09-06 20:59:36]   beta_disorder = -0.04599 (p = 8.16e-02); beta_contact = +0.00580; beta_helix = -0.00833; beta_sheet = -0.03257
+[2026-09-06 20:59:36] elapsed_seconds=5.0

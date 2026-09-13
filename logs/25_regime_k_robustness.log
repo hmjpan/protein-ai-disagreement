@@ -1,0 +1,7 @@
+[2026-08-30 19:19:38] variants: 696311
+[2026-08-30 19:21:18] K=4: dissent=False Y_tol=0.289 Y_dam=0.752 agreement=0.840 (n=30)
+[2026-08-30 19:22:32] K=5: dissent=False Y_tol=0.255 Y_dam=0.788 agreement=0.796 (n=30)
+[2026-08-30 19:23:50] K=6: dissent=True Y_tol=0.257 Y_dam=0.749 agreement=0.776 (n=30)
+[2026-08-30 19:25:11] K=7: dissent=True Y_tol=0.298 Y_dam=0.728 agreement=0.748 (n=30)
+[2026-08-30 19:25:12] ARI vs K=6: K=4: 0.353, K=5: 0.584, K=7: 0.462
+[2026-08-30 19:25:12] elapsed_seconds=334.4

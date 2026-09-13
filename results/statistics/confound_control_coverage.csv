@@ -1,0 +1,13 @@
+plddt_bin,model,frac_scored
+pLDDT<50,MIF,1.0
+pLDDT<50,ESM-IF1,1.0
+pLDDT<50,ProteinMPNN,1.0
+50-70,MIF,1.0
+50-70,ESM-IF1,1.0
+50-70,ProteinMPNN,1.0
+70-90,MIF,1.0
+70-90,ESM-IF1,1.0
+70-90,ProteinMPNN,1.0
+>=90,MIF,1.0
+>=90,ESM-IF1,1.0
+>=90,ProteinMPNN,1.0

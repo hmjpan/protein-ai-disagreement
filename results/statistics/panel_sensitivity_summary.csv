@@ -1,0 +1,3 @@
+analysis,median_rho_D_evo_struct,n_proteins,frac_negative,n_iterations,median_of_medians,p2.5,p97.5,frac_iterations_negative_median
+A_arch_panel,-0.39999999999999997,184.0,0.657608695652174,,,,,
+B_balanced_sampling,,,,1000.0,-0.39999999999999997,-0.39999999999999997,-0.19999999999999998,1.0

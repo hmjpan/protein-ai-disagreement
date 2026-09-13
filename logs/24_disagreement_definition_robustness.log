@@ -1,0 +1,8 @@
+[2026-09-06 20:58:37] core panel loaded: 40 models
+[2026-09-06 20:58:49] 
+definition  n_proteins  median_rho  ci_low  ci_high  frac_negative
+     D_MAD         154     -0.0761 -0.1043  -0.0518         0.7532
+    D_pair         154     -0.0893 -0.1091  -0.0521         0.7338
+     D_std         154     -0.0781 -0.1013  -0.0397         0.7143
+       D_u         154     -0.1146 -0.1498  -0.0907         0.7662
+[2026-09-06 20:58:49] elapsed_seconds=24.7

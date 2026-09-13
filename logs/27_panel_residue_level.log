@@ -1,0 +1,11 @@
+[2026-09-06 14:50:55] core panel loaded: 40 models
+[2026-09-06 14:50:56] rows: 696311; proteins: 186
+[2026-09-06 14:50:56] Analysis A panel: ['z_ESM1v_ensemble', 'z_GEMME', 'z_EVE_ensemble', 'z_MSA_Transformer_ensemble', 'z_ESM-IF1', 'z_ProteinMPNN', 'z_SaProt_650M_AF2', 'z_Tranception_L']
+[2026-09-06 14:51:01] Analysis A (residue-level): median rho = -0.0552 (n=154, frac neg 0.682)
+[2026-09-06 15:01:37] balanced 200/1000: median of medians = -0.0554 (636s elapsed)
+[2026-09-06 15:12:16] balanced 400/1000: median of medians = -0.0542 (1275s elapsed)
+[2026-09-06 15:22:51] balanced 600/1000: median of medians = -0.0530 (1910s elapsed)
+[2026-09-06 15:33:25] balanced 800/1000: median of medians = -0.0530 (2544s elapsed)
+[2026-09-06 15:43:50] balanced 1000/1000: median of medians = -0.0532 (3169s elapsed)
+[2026-09-06 15:43:51] Analysis B (residue-level): median = -0.0532 [-0.0768, -0.0210], frac negative = 1.000
+[2026-09-06 15:43:51] elapsed_seconds=3194.3

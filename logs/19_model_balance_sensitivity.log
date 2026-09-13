@@ -1,0 +1,12 @@
+[2026-08-30 11:17:25] core panel loaded: 40 models
+[2026-08-30 11:17:26] rows: 696311; proteins: 186
+[2026-08-30 11:17:26] Analysis A panel: 8 models: ['ESM1v_ensemble', 'GEMME', 'EVE_ensemble', 'MSA_Transformer_ensemble', 'ESM-IF1', 'ProteinMPNN', 'SaProt_650M_AF2', 'Tranception_L']
+[2026-08-30 11:17:29] Analysis A (D_evo_struct): median within-protein rho = -0.4000 (n=184 proteins, frac negative 0.658)
+[2026-08-30 11:17:29] family sizes: {'evolution': 12, 'single_seq': 14, 'structure': 3}
+[2026-08-30 11:27:36] balanced sampling 200/1000: current median of medians = -0.4000
+[2026-08-30 11:37:31] balanced sampling 400/1000: current median of medians = -0.4000
+[2026-08-30 11:47:27] balanced sampling 600/1000: current median of medians = -0.4000
+[2026-08-30 11:57:27] balanced sampling 800/1000: current median of medians = -0.4000
+[2026-08-30 12:07:26] balanced sampling 1000/1000: current median of medians = -0.4000
+[2026-08-30 12:07:26] Analysis B: median of per-iteration medians = -0.4000 [-0.4000, -0.2000]; 1.000 of iterations negative
+[2026-08-30 12:07:26] elapsed_seconds=3008.6

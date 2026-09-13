@@ -1,0 +1,8 @@
+[2026-08-29 13:17:13] reference rows: 217; columns: ['DMS_index', 'DMS_id', 'DMS_filename', 'UniProt_ID', 'taxon', 'source_organism', 'target_seq', 'seq_len', 'includes_multiple_mutants', 'DMS_total_number_mutants', 'DMS_number_single_mutants', 'DMS_number_multiple_mutants', 'DMS_binarization_cutoff', 'DMS_binarization_method', 'first_author', 'title', 'year', 'jo', 'region_mutated', 'molecule_name', 'selection_assay', 'selection_type', 'MSA_filename', 'MSA_start', 'MSA_end', 'MSA_len', 'MSA_bitscore', 'MSA_theta', 'MSA_num_seqs', 'MSA_perc_cov', 'MSA_num_cov', 'MSA_N_eff', 'MSA_Neff_L', 'MSA_Neff_L_category', 'MSA_num_significant', 'MSA_num_significant_L', 'raw_DMS_filename', 'raw_DMS_phenotype_name', 'raw_DMS_directionality', 'raw_DMS_mutant_column', 'weight_file_name', 'pdb_file', 'pdb_range', 'ProteinGym_version', 'raw_mut_offset', 'coarse_selection_type']
+[2026-08-29 13:17:13] DMS files: 217; score files: 217
+[2026-08-29 13:17:13] assay overlap (DMS n scores): 217
+[2026-08-29 13:17:26] TableS1: 217 assays; single-mutant fraction overall 0.282
+[2026-08-29 13:17:33] distinct model columns found: 99
+[2026-08-29 13:19:27] TableS3 written: (217, 100)
+[2026-08-29 13:19:27] TableS2 written: 99 models; families: {'single_seq': 45, 'hybrid': 28, 'evolution': 19, 'other': 4, 'structure': 3}
+[2026-08-29 13:19:27] elapsed_seconds=133.5

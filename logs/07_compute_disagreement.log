@@ -1,0 +1,4 @@
+[2026-08-29 13:30:46] core panel: 40 models -> {'single_seq': 14, 'evolution': 12, 'hybrid': 11, 'structure': 3}
+[2026-08-29 13:30:51] disagreement_scores.parquet: 696311 rows; mean D_std=0.6317; non-null D_std=1.000
+[2026-08-29 13:30:51] TableS4: 217 assays
+[2026-08-29 13:30:51] elapsed_seconds=6.9
