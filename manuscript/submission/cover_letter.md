@@ -9,10 +9,12 @@ We are pleased to submit our manuscript entitled:
 for consideration for publication in *AI for Science*.
 
 **Why this fits AI for Science.** This is an AI-driven biological discovery
-study, not a benchmark. We use 40 architecturally diverse protein AI models
-as a scientific instrument and show that their *disagreement* -- usually
-treated as noise -- is a structured observable that tracks the biological
-organization of the mutational landscape: evolution-vs-structure disagreement accumulates where AlphaFold
+study, not a benchmark, and its core claim is conceptual: we turn
+*disagreement between protein AI models into a scientific observable* --
+something to be measured, mapped, and bounded, not noise to be averaged
+away. Using 40 architecturally diverse protein AI models as a scientific
+instrument, we show that their disagreement is a structured observable
+that tracks the biological organization of the mutational landscape: evolution-vs-structure disagreement accumulates where AlphaFold
 structural confidence is low, total disagreement is elevated in intrinsically disordered
 regions, resolves into reproducible biological regimes, and reveals that
 relative model-family expertise is context-specific only for curated

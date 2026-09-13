@@ -32,9 +32,9 @@ TITLE = ("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence")
 
 ABSTRACT = """Protein AI models -- evolutionary (MSA), single-sequence language, and structure-conditioned predictors -- are usually treated as competing estimators of mutation effect. Here we ask what it means, biologically, when they disagree. Using 696,311 single missense substitutions across 217 deep-mutational scanning assays (ProteinGym v1.3) scored by 40 architecturally diverse zero-shot models, we show that disagreement contains reproducible biological structure: it tracks AlphaFold structural confidence.
 
-Within proteins, evolution-vs-structure disagreement is negatively associated with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to multivariable adjustment, panel resampling and four definitions of total disagreement; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls resist an input-quality-only account: experimental-structure rescoring of ESM-IF1 (64 assays) runs opposite to it, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend (architecture-level independence). Curated disorder marks a related but distinct regime (total, not pair-specific, disagreement elevated; single-sequence models lose advantage). Regimes, discrete summaries of a continuous geometry, generalize: frozen-centroid protein-level cross-validation reproduces training phenotypes (median Spearman 0.94; 185/185 positive), and regime phenotypes replicate across independent assays (0.94; 37 pairs, 28 held out).
+Within proteins, evolution-vs-structure disagreement is negatively associated with pLDDT (median residue-level Spearman -0.04, 95% CI -0.06 to -0.03; 67.5% of 154 proteins negative; p < 0.001), robust to multivariable adjustment, panel resampling and four definitions of total disagreement; low-confidence residues are ~1.5-1.8x more likely to be maximally disagreeable. Two external controls resist an input-quality-only account: experimental-structure rescoring of ESM-IF1 (64 assays) runs opposite to it, and SSEmb, a distinct joint sequence-structure architecture, reproduces the trend. Curated disorder marks a related but distinct regime (total, not pair-specific, disagreement elevated there). Regimes (discrete summaries of a continuous geometry) generalize: frozen-centroid protein-level cross-validation reproduces training phenotypes (median Spearman 0.94; 185/185), and regime phenotypes replicate across independent assays (0.94; 37 pairs, 28 held out).
 
-Disagreement is only weakly associated with prediction error in DMS (assay-level Spearman 0.032), and this signal is panel-scale-dependent: under the five models released for the clinical benchmark it vanishes in DMS (-0.001, 95% CI -0.008 to +0.005) and reverses in clinical annotation (-0.23; AUROC of low disagreement for misclassification 0.635). A gated ensemble does not beat uniform averaging in DMS (paired delta +0.000, CI -0.008 to +0.008); clinically it beats the matched two-family baseline (+0.045, CI +0.038 to +0.053) but not the five-model average (-0.011). Disagreement among protein AI models is thus an AI-generated map of where evolutionarily informed and structure-conditioned predictions diverge; its value is explanatory, not predictive."""
+Disagreement is only weakly associated with prediction error in DMS (assay-level Spearman 0.032), and this signal is panel-scale-dependent: under the five models released for the clinical benchmark it vanishes in DMS (-0.001, 95% CI -0.008 to +0.005) and reverses in clinical annotation (-0.23; AUROC of low disagreement for misclassification 0.635). A gated ensemble does not beat uniform averaging in DMS (paired delta +0.000, CI -0.008 to +0.008); clinically it beats the matched two-family baseline (+0.045, CI +0.038 to +0.053) but not the five-model average (-0.011). Model disagreement is thus a scientific observable in its own right: an AI-generated map of where evolutionarily informed and structure-conditioned predictions diverge -- reproducible, structured, and domain-bounded, but explanatory rather than predictive."""
 
 KEYWORDS = ["variant effect prediction", "protein language models",
             "deep mutational scanning", "model disagreement",
@@ -455,10 +455,12 @@ We are pleased to submit our manuscript entitled:
 for consideration for publication in *AI for Science*.
 
 **Why this fits AI for Science.** This is an AI-driven biological discovery
-study, not a benchmark. We use 40 architecturally diverse protein AI models
-as a scientific instrument and show that their *disagreement* -- usually
-treated as noise -- is a structured observable that tracks the biological
-organization of the mutational landscape: evolution-vs-structure disagreement accumulates where AlphaFold
+study, not a benchmark, and its core claim is conceptual: we turn
+*disagreement between protein AI models into a scientific observable* --
+something to be measured, mapped, and bounded, not noise to be averaged
+away. Using 40 architecturally diverse protein AI models as a scientific
+instrument, we show that their disagreement is a structured observable
+that tracks the biological organization of the mutational landscape: evolution-vs-structure disagreement accumulates where AlphaFold
 structural confidence is low, total disagreement is elevated in intrinsically disordered
 regions, resolves into reproducible biological regimes, and reveals that
 relative model-family expertise is context-specific only for curated
