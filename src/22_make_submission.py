@@ -28,7 +28,7 @@ from common import ROOT  # noqa: E402
 OUT = ROOT / "manuscript" / "submission"
 OUT.mkdir(parents=True, exist_ok=True)
 
-TITLE = ("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence")
+TITLE = ("Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence")
 
 ABSTRACT = """Protein AI models -- evolutionary (MSA), single-sequence language, and structure-conditioned predictors -- are usually treated as competing estimators of mutation effect. Here we ask what it means, biologically, when they disagree. Using 696,311 single missense substitutions across 217 deep-mutational scanning assays (ProteinGym v1.3) scored by 40 architecturally diverse zero-shot models, we show that disagreement contains reproducible biological structure: it tracks AlphaFold structural confidence.
 
@@ -464,7 +464,7 @@ that tracks the biological organization of the mutational landscape: evolution-v
 structural confidence is low, total disagreement is elevated in intrinsically disordered
 regions, resolves into reproducible biological regimes, and reveals that
 relative model-family expertise is context-specific only for curated
-disorder. The framing -- "disagreement as a biological probe" -- is, to our
+disorder. The framing -- "disagreement as a scientific observable" -- is, to our
 knowledge, new, and it falls squarely within the journal's mission of
 transformative AI applications in the life sciences.
 

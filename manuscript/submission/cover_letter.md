@@ -4,7 +4,7 @@ Dear Editors,
 
 We are pleased to submit our manuscript entitled:
 
-**"Protein AI Model Disagreement Tracks AlphaFold Structural Confidence"**
+**"Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence"**
 
 for consideration for publication in *AI for Science*.
 
@@ -18,7 +18,7 @@ that tracks the biological organization of the mutational landscape: evolution-v
 structural confidence is low, total disagreement is elevated in intrinsically disordered
 regions, resolves into reproducible biological regimes, and reveals that
 relative model-family expertise is context-specific only for curated
-disorder. The framing -- "disagreement as a biological probe" -- is, to our
+disorder. The framing -- "disagreement as a scientific observable" -- is, to our
 knowledge, new, and it falls squarely within the journal's mission of
 transformative AI applications in the life sciences.
 

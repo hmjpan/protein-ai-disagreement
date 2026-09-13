@@ -1,7 +1,7 @@
-# Protein AI Model Disagreement Tracks AlphaFold Structural Confidence
+# Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence
 
 Analysis code, results tables and figures for the manuscript
-*"Protein AI Model Disagreement Tracks AlphaFold Structural Confidence"*.
+*"Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence"*.
 
 Every figure in the manuscript has a machine-readable source table under
 `results/`, and all analyses run from public data with fixed settings

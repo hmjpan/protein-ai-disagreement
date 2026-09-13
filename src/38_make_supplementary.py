@@ -118,7 +118,7 @@ def add_table(headers, data, widths=None):
 
 # ---- cover page ----
 para("Supplementary Information", bold=True, size=16, center=True)
-para("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence",
+para("Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence",
      bold=True, size=13, center=True)
 para("")
 para("Contents", bold=True)

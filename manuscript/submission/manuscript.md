@@ -1,4 +1,4 @@
-# Protein AI Model Disagreement Tracks AlphaFold Structural Confidence
+# Model Disagreement as a Scientific Observable: Structure and Boundaries of Protein AI Divergence
 
 ## Abstract
 
