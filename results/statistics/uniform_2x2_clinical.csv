@@ -1,0 +1,3 @@
+set,n,median_raw_mean,median_rank_mean
+"all scored proteins (2,490)",1530,0.9756309650053022,0.9766992690837999
+gate-complete subset (788),789,0.965,0.9657079646017699

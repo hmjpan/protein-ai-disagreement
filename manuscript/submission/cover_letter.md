@@ -33,12 +33,12 @@ across independent DMS assays (median Spearman 0.94), with consensus
 regimes aligned with experiment in 100% of pairs; (3) relative family
 expertise is context-specific only for curated disorder (single-sequence
 models lose relative advantage in IDR, -0.043 vs +0.038), not along the
-confidence axis; (4) a DMS-trained biologically gated ensemble transfers to
-clinical variants without clinical-label retraining (median protein-level
-AUROC 0.899 vs 0.867 uniform on a strictly non-overlapping 788-protein
-set), while the disagreement-error association reverses in clinical
-annotation (two-family matched control: +0.027 in DMS, -0.47 clinically) --
-a boundary condition we report explicitly. The clinical non-overlap set is
+confidence axis; (4) a DMS-trained two-expert gate applies to clinical variants without
+clinical-label retraining and beats its matched two-family baseline on 789
+strictly non-overlapping proteins (+0.045, 95% CI +0.038 to +0.053) but
+not the five-model average (-0.011); the disagreement-error association
+vanishes in DMS under the same narrow five-model panel and reverses sign
+in clinical annotation -- boundary conditions we report explicitly. The clinical non-overlap set is
 defined by standard HMMER3 phmmer homology search. A most-closely-related
 2026 Nature Communications study (Livesey & Marsh) asks why individual
 predictors disagree with experiments; our question is complementary --

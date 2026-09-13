@@ -40,7 +40,7 @@ from sklearn.metrics import roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    PROCESSED, STATISTICS, FIGURES_MAIN, Job, load_core_panel,
+    PROCESSED, RAW, STATISTICS, FIGURES_MAIN, Job, load_core_panel,
     read_reference_clinical,
 )
 
@@ -82,6 +82,17 @@ def main():
     core = load_core_panel(job)
     core_names = set(core["model"])
 
+    # zero-shot models officially released for the clinical benchmark and
+    # their directionality from the benchmark's own config metadata
+    import json
+    cfg = json.loads((RAW / "reference" / "proteingym_config.json")
+                     .read_text(encoding="utf-8"))
+    zsc = cfg["model_list_zero_shot_substitutions_clinical"]
+    DIR = {m: int(d.get("directionality", 1)) for m, d in zsc.items()}
+    job.info("clinical zero-shot directionality (official metadata): "
+             + ", ".join(f"{m}={DIR.get(m)}" for m in
+                         ["TranceptEVE_L", "GEMME", "EVE", "ESM1b", "PoET"]))
+
     frames = []
     for p in score_files:
         dms_id = p.stem
@@ -94,8 +105,14 @@ def main():
         sc["DMS_id"] = dms_id
         frames.append(sc)
     cli = pd.concat(frames, ignore_index=True)
-    model_list = [c for c in cli.columns
-                  if c in core_names and c != "mutant"]
+    ZS_PANEL = ["GEMME", "EVE", "ESM1b", "PoET", "TranceptEVE_L"]
+    model_list = [c for c in ZS_PANEL if c in cli.columns]
+    for m in model_list:
+        if DIR.get(m, 1) == -1:
+            cli[m] = -cli[m]  # orient to higher = fitness per official
+                              # clinical-benchmark metadata (PoET is -1)
+    job.info("clinical zero-shot panel (oriented): " + ", ".join(model_list))
+    FAM_ALIAS = {"EVE": "EVE_ensemble"}
     job.info(f"clinical variants: {len(cli)}; proteins: {cli.DMS_id.nunique()}; "
              f"clinical core panel: {model_list}")
 
@@ -172,7 +189,8 @@ def main():
 
     # clinical experts: seq + evo only (percentile u scale)
     fam_avail = [c for c in EXPERTS
-                 if any(core.loc[core.model == m, "family"].iloc[0] ==
+                 if any(core.loc[core.model == FAM_ALIAS.get(m, m),
+                                 "family"].iloc[0] ==
                         c.split("_", 1)[1] for m in model_list)]
     job.info(f"clinical expert families: {fam_avail}")
     if len(fam_avail) < 2:
@@ -240,7 +258,8 @@ def main():
     for f in fam_avail:
         fam = f.split("_", 1)[1]
         idx = [m_map[m] for m in model_list
-               if core.loc[core.model == m, "family"].iloc[0] == fam]
+               if core.loc[core.model ==
+                           FAM_ALIAS.get(m, m), "family"].iloc[0] == fam]
         cS_u = np.full(cS_raw.shape, np.nan)
         for j in range(cS_raw.shape[1]):
             s = cS_raw[:, j]

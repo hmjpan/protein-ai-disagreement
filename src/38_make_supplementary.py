@@ -293,27 +293,32 @@ add_table(["Statistic", "Value"],
 para("Per-protein values: results/statistics/heldout_regime_per_protein.csv.",
      size=9)
 
-# S10: matched two-family control
+# S10: matched five-model control + averaging-convention sensitivity
 cap("S10")
-tf = rows_of("twofamily_dms_vs_clinical.csv")
-para("(a) Identical two-family definition in both datasets: disagreement "
-     "|U_seq - U_evo| versus two-family ensemble error; per-assay (DMS) or "
-     "per-protein (clinical) Spearman, median with 10,000-resample bootstrap "
-     "CI (frac_positive = fraction of units with rho > 0):", bold=True,
+para("(a) Identical SD(z) disagreement and rank-averaged ensemble error in "
+     "both datasets (five released zero-shot models; PoET oriented per "
+     "official clinical metadata); median per-assay (DMS) / per-protein "
+     "(clinical) Spearman with 10,000-resample bootstrap CIs:", bold=True,
      size=10)
-add_table(["Dataset", "units", "median rho", "95% CI", "frac positive"],
-          [[r["dataset"], r["n_units"], fmt(r["median_rho"]),
-            f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}",
-            fmt(r["frac_positive"])]
-           for r in tf if "AUROC" not in r["dataset"]])
+m5 = rows_of("matched5_dms_vs_clinical.csv")
+add_table(["Dataset", "statistic", "units", "median", "95% CI"],
+          [[r["dataset"], r["statistic"], r["units"], fmt(r["value"]),
+            f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}"] for r in m5])
 para("")
-para("(b) Scale-matched discriminative comparison (binary outcomes; "
-     "frac = fraction of units with AUROC > 0.5):", bold=True, size=10)
-add_table(["Dataset", "units", "median AUROC", "95% CI", "frac > 0.5"],
-          [[r["dataset"], r["n_units"], fmt(r["median_rho"]),
+para("(b) Five-model uniform AUROC by averaging convention:", bold=True,
+     size=10)
+add_table(["Set", "n proteins", "naive raw-score mean", "rank mean"],
+          [[r["set"], r["n"], fmt(r["median_raw_mean"]),
+            fmt(r["median_rank_mean"])]
+           for r in rows_of("uniform_2x2_clinical.csv")])
+para("")
+para("(c) Paired BioGate minus rank-averaged five-model uniform (strict "
+     "gate-complete set):", bold=True, size=10)
+add_table(["Comparison", "n", "median delta", "95% CI", "frac positive"],
+          [[r["comparison"], r["n"], fmt(r["median_delta"]),
             f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}",
             fmt(r["frac_positive"])]
-           for r in tf if "AUROC" in r["dataset"]])
+           for r in rows_of("gate_vs_rankuniform.csv")])
 
 # S11: structure-subset sensitivity
 cap("S11")

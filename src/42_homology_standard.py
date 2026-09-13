@@ -40,6 +40,7 @@ from common import (PROCESSED, RAW, STATISTICS, TABLES, Job,
                     read_reference_clinical)  # noqa: E402
 
 QCOV_MIN = 70.0
+ZS = ["TranceptEVE_L", "GEMME", "EVE", "ESM1b", "PoET"]
 THRESHOLDS = [30, 50, 70]
 
 
@@ -123,12 +124,16 @@ def main():
         sc["label"] = lab.map({"pathogenic": 1, "benign": 0})
         sc = sc[sc["label"].notna()]
         yl = sc["label"].to_numpy().astype(int)
-        if yl.size == 0 or np.unique(yl).size < 2:
+        if yl.size < 10 or np.unique(yl).size < 2:
             continue
-        models = [m for m in core if m in sc.columns]
+        models = [m for m in ZS if m in sc.columns]
         if len(models) < 3:
             continue
-        R = np.apply_along_axis(rankdata, 0, sc[models].to_numpy(dtype=float))
+        M = sc[models].to_numpy(dtype=float)
+        for j, m in enumerate(models):
+            if m == "PoET":
+                M[:, j] = -M[:, j]  # official clinical metadata dir=-1
+        R = np.apply_along_axis(rankdata, 0, M)
         ens = 1 - np.nanmean(R, axis=1)
         auroc[dms_id] = roc_auc_score(yl, ens)
     per["uniform_auroc"] = per["DMS_id"].map(auroc)

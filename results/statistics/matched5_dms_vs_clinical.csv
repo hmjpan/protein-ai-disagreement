@@ -1,0 +1,5 @@
+dataset,statistic,units,value,ci_low,ci_high
+"DMS (same 5 models, same SD(z)/rank-mean definitions)","median per-assay Spearman(D, |mean_u - Y|)",215,-0.0013827904676148794,-0.008486361849089576,0.004826031324921804
+Clinical (released definition),"median per-protein Spearman(D, |mean_u - label|)",1530,-0.23076923076923078,-0.24748467842146823,-0.21700662878573324
+DMS (same 5 models),median AUROC of D for above-median error,215,0.49911450312528305,0.49565467902242283,0.5028985507246377
+Clinical,median AUROC of low D for misclassification (0.5 rule),1486,0.6347217438766735,0.6255434782608695,0.6428571428571428
