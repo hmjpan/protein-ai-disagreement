@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Build supplementary.docx: one page per supplementary figure (S1-S11) and
-real Word tables for Tables S1-S8, from the pipeline result CSVs.
+real Word tables for Tables S1-S12, from the pipeline result CSVs.
 
 Captions for the tables are parsed live from manuscript/submission/
 manuscript.md so there is a single source of truth.
@@ -77,12 +77,12 @@ seg = seg[:seg.find("## Figure captions") if "## Figure captions" in seg[:200] e
 TBL_CAP = {}
 parts = re.split(r"(?=\*\*Table S\d)", seg)
 for pt in parts:
-    m = re.match(r"\*\*Table (S\d)\.(.*?)\n\n", pt, re.S)
+    m = re.match(r"\*\*Table (S\d+)\.(.*?)\n\n", pt, re.S)
     if not m:
-        m = re.match(r"\*\*Table (S\d)\.(.*)$", pt, re.S)
+        m = re.match(r"\*\*Table (S\d+)\.(.*)$", pt, re.S)
     if m:
         TBL_CAP[m.group(1)] = ("Table " + m.group(1) + "." + m.group(2)).replace("**", "")
-assert len(TBL_CAP) == 9, sorted(TBL_CAP)
+assert len(TBL_CAP) == 12, sorted(TBL_CAP)
 
 doc = Document()
 st = doc.styles["Normal"]
@@ -123,9 +123,9 @@ para("Protein AI Model Disagreement Tracks AlphaFold Structural Confidence",
 para("")
 para("Contents", bold=True)
 para("Supplementary Figures S1-S11 (one figure per page).", size=10.5)
-para("Supplementary Tables S1-S9.", size=10.5)
+para("Supplementary Tables S1-S12.", size=10.5)
 para("")
-para("All underlying machine-readable tables and pipeline code (scripts 01-37) "
+para("All underlying machine-readable tables and pipeline code (scripts 01-44) "
      "are archived with the manuscript at "
      "https://github.com/hmjpan/protein-ai-disagreement (results/ and figures/ "
      "directories). Primary inferential summaries aggregate at the protein "
@@ -227,13 +227,20 @@ add_table(["K", "structure-dissenting regime present", "Y consensus-tolerant",
            "Y consensus-damaging", "cross-assay agreement", "cross-assay pairs",
            "ARI vs K=6"], data3)
 
-# S4: identity thresholds
+# S4: standard homology sensitivity
 cap("S4")
-add_table(["Identity threshold", "proteins excluded", "variants", "proteins",
+para("Best-hit pairwise identity and query coverage from HMMER3 phmmer "
+     "(clinical targets queried against the 217 DMS assay targets, "
+     "E <= 1e-3); exclusion requires both criteria. Median AUROC uses the "
+     "rank-averaged uniform ensemble over core-panel models.", size=9)
+add_table(["Identity threshold", "query coverage", "proteins excluded",
+           "shared with old 35", "proteins retained (with AUROC)",
            "median uniform AUROC"],
-          [[f"{int(float(r['threshold']) * 100)}%", r["n_excluded"],
-            fmt(r["n_variants"]), fmt(r["n_proteins"]), fmt(r["median_auroc"])]
-           for r in rows_of("identity_threshold_sensitivity.csv")])
+          [[f"pident >= {r['threshold_pident']}%",
+            f">= {float(r['qcov_min_pct']):.0f}%",
+            r["n_excluded"], r["overlap_with_old35"],
+            fmt(r["n_proteins_with_auroc"]), fmt(r["median_uniform_auroc"])]
+           for r in rows_of("homology_standard_sensitivity.csv")])
 
 # S5: XGBoost ablations
 cap("S5")
@@ -285,6 +292,58 @@ add_table(["Statistic", "Value"],
             f"({h['heldout_crossassay_n_pairs']}/{h['heldout_crossassay_n_pairs']})"]])
 para("Per-protein values: results/statistics/heldout_regime_per_protein.csv.",
      size=9)
+
+# S10: matched two-family control
+cap("S10")
+tf = rows_of("twofamily_dms_vs_clinical.csv")
+para("(a) Identical two-family definition in both datasets: disagreement "
+     "|U_seq - U_evo| versus two-family ensemble error; per-assay (DMS) or "
+     "per-protein (clinical) Spearman, median with 10,000-resample bootstrap "
+     "CI (frac_positive = fraction of units with rho > 0):", bold=True,
+     size=10)
+add_table(["Dataset", "units", "median rho", "95% CI", "frac positive"],
+          [[r["dataset"], r["n_units"], fmt(r["median_rho"]),
+            f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}",
+            fmt(r["frac_positive"])]
+           for r in tf if "AUROC" not in r["dataset"]])
+para("")
+para("(b) Scale-matched discriminative comparison (binary outcomes; "
+     "frac = fraction of units with AUROC > 0.5):", bold=True, size=10)
+add_table(["Dataset", "units", "median AUROC", "95% CI", "frac > 0.5"],
+          [[r["dataset"], r["n_units"], fmt(r["median_rho"]),
+            f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}",
+            fmt(r["frac_positive"])]
+           for r in tf if "AUROC" in r["dataset"]])
+
+# S11: structure-subset sensitivity
+cap("S11")
+add_table(["Structure configuration", "n models", "proteins", "median rho",
+           "bootstrap 95% CI", "frac negative", "sign-test P"],
+          [[r["config"], r["n_struct_models"], r["n_proteins"],
+            fmt(r["median_rho"]), f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}",
+            fmt(r["frac_negative"]), f"{float(r['sign_p']):.1e}"]
+           for r in rows_of("struct_subset_sensitivity.csv")])
+
+# S12: held-out without consensus regimes
+cap("S12")
+para("(a) Concordance of held-out regime phenotypes with training profiles "
+     "(n >= 100 variants per held-out protein; IQR shown because the reduced-"
+     "regime Spearman is discrete on 4 regimes):", bold=True, size=10)
+add_table(["Metric", "value", "IQR", "proteins"],
+          [[r["metric"], fmt(r["value"]),
+            f"{fmt(r['ci_low'])} to {fmt(r['ci_high'])}"
+            if r["ci_low"] not in ("", "nan") else "-",
+            r["n"]]
+           for r in rows_of("heldout_noconsensus_summary.csv")])
+para("")
+para("(b) Per-regime experimental-Y medians, training vs held-out (pooled "
+     "across folds):", bold=True, size=10)
+add_table(["Regime (machine label)", "held-out variants", "train Y median",
+           "held-out Y median", "abs. difference"],
+          [[f"regime_{int(float(r['reg']))}", fmt(r["heldout_n"]),
+            fmt(r["train_Y"]), fmt(r["heldout_Y"]),
+            f"{abs(float(r['train_Y']) - float(r['heldout_Y'])):.3f}"]
+           for r in rows_of("heldout_noconsensus_regimes.csv")])
 
 # S9: BIC sweep + functional-feature permutation enrichment
 cap("S9")

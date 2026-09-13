@@ -156,10 +156,10 @@ if __name__ == "__main__":
     for L in ("A", "B"):
         if panel_file(1, L) is None:
             (make_fig1a if L == "A" else make_fig1b)()
-    compose(1, [["A", "B"], ["C", "D", "E"]])
+    compose(1, [["A", "B"], ["C", "D"], ["E"]])
     compose(2, [["A", "B"], ["C", "D"]])
     compose(3, [["A"], ["B"], ["C"]])
     compose(4, [["A"], ["B"], ["C"], ["D"]])
-    compose(5, [["A", "B", "C"]])
-    compose(6, [["A", "B"]])
+    compose(5, [["A"], ["B"], ["C"]])
+    compose(6, [["A"], ["B"]])
     print("composed figures written to", OUTD)

@@ -148,21 +148,16 @@ def main():
     identity_excl = set(map_df.loc[map_df["uniprot"].isin(dms_uniprots), "DMS_id"])
     job.info(f"clinical proteins sharing UniProt with DMS: {len(identity_excl)}")
 
-    # homology exclusion (only for proteins not already identity-excluded)
-    hom_excl = set()
-    target_map = dict(zip(dref["DMS_id"], dms_targets))
-    for _, row in map_df.iterrows():
-        dms_id = row["DMS_id"]
-        if dms_id in identity_excl:
-            continue
-        target = ref.loc[ref["DMS_id"] == dms_id, "target_seq"]
-        if target.empty:
-            continue
-        ident = max_identity(str(target.iloc[0]), dms_targets, job)
-        if ident >= IDENTITY_THRESH:
-            hom_excl.add(dms_id)
-    job.info(f"clinical proteins with >= {IDENTITY_THRESH:.0%} identity to a DMS "
-             f"protein: {len(hom_excl)}")
+    # homology exclusion: STANDARD protein homology search results
+    # (HMMER3 phmmer, 42_homology_standard.py): exclude when best-hit
+    # pairwise identity >= 70% AND query coverage >= 70%
+    hom_std = pd.read_csv(STATISTICS / "homology_standard_per_protein.csv")
+    hom_std["DMS_id"] = hom_std["DMS_id"].astype(str)
+    hom_excl = set(hom_std.loc[(hom_std["max_pident"] >= 70.0)
+                               & (hom_std["qcov_pct"] >= 70.0),
+                               "DMS_id"].astype(str))
+    job.info(f"clinical proteins with standard homology exclusion "
+             f"(>= {IDENTITY_THRESH:.0%} id & >=70% cov): {len(hom_excl)}")
     strict_excl = identity_excl | hom_excl
     job.info(f"STRICT exclusion set: {len(strict_excl)} clinical proteins")
 

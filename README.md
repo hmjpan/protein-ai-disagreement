@@ -1,56 +1,55 @@
-# Protein AI Disagreement: Revealing Hidden Biological Regimes of Missense Variation
+# Protein AI Model Disagreement Tracks AlphaFold Structural Confidence
 
-Scientific question: **Why do different protein AI models disagree on the same
-amino-acid substitution, and does this disagreement carry biological
-structure?**
+Analysis code, results tables and figures for the manuscript
+*"Protein AI Model Disagreement Tracks AlphaFold Structural Confidence"*.
 
-This is a *discovery-driven* (not benchmark) study. The pipeline is designed so
-that hypotheses are tested, not retrofitted. See `config.yaml` for all
-pre-registered thresholds.
+Every figure in the manuscript has a machine-readable source table under
+`results/`, and all analyses run from public data with fixed settings
+recorded in `config.yaml`.
 
-## Pipeline (Phase 1)
+## Data dependencies (all public)
 
-| Script | Purpose | Key outputs |
-|---|---|---|
-| `01_download_data.py` | verify data integrity, fetch official model score directions | `MANIFEST.md`, `model_direction.csv` |
-| `02_inventory_data.py` | assay / model / coverage inventories | `TableS1/S2/S3` |
-| `03_parse_dms.py` | parse assays, flag single substitutions & sequence mismatches | `processed_single_mutations.parquet` |
-| `04_merge_model_scores.py` | merge zero-shot model scores | `merged_scores_wide.parquet` |
-| `05_quality_control.py` | QC + core model panel selection | `model_panel.csv`, `panel_scores.parquet`, `QC_report.md` |
-| `06_normalize_scores.py` | per-assay rank normalization, direction alignment | `normalized_scores.parquet` |
-| `07_compute_disagreement.py` | D_std / D_MAD / family disagreement | `disagreement_scores.parquet`, `TableS4` |
+1. **ProteinGym v1.3** -- https://doi.org/10.5281/zenodo.15293562
+   DMS substitution assays, precomputed zero-shot model scores, the clinical
+   benchmark, and AlphaFold2 structure files. Downloaded by
+   `src/01_download_data.py`.
+2. **UniProt REST API** -- features and curated disordered regions
+   (`src/09_structure_annotations.py`, `src/36_aligner_mapping.py`).
+3. **Gitter-lab experimental-structure benchmark** --
+   https://doi.org/10.5281/zenodo.13819824 and
+   https://github.com/gitter-lab/benchmarking-structure-based-models
+   (ESM-IF1 scores on experimental structures; SSEmb scores) used by
+   `src/35_expstruct_control.py`.
 
-## Hard rules (non-negotiable)
+## Layout
 
-1. No fabricated numbers. Every figure must have a machine-readable source table.
-2. No direction inference from DMS labels (official configs only).
-3. Protein-level (UniProt) splits only; no random mutation splits.
-4. AlphaFold low-pLDDT != intrinsically disordered region (wording rule).
-5. Association != causation (wording rule).
-6. Negative results are reported, never deleted.
-7. GO/NO-GO checkpoints are evaluated against `config.yaml` thresholds.
-
-## Data provenance
-
-- ProteinGym v1.3 (OATML-Markslab), DOI: 10.5281/zenodo.15293562
-- DMS substitutions: 217 assays / ~2.7M variants
-- Clinical substitutions: 2,525 proteins / ~63K variants
-- All downloads from `https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/`
-
-## Reproduction
-
-```bash
-python src/01_download_data.py
-python src/02_inventory_data.py
-python src/03_parse_dms.py
-python src/04_merge_model_scores.py
-python src/05_quality_control.py
-python src/06_normalize_scores.py
-python src/07_compute_disagreement.py
+```
+src/            numbered pipeline scripts (01-44); run in numeric order
+                41 matched two-family DMS/clinical control
+                42 standard-homology exclusion via HMMER3 phmmer (pyhmmer)
+                43 structure-subset sensitivity; 44 held-out consensus removal
+config.yaml     fixed analysis settings (seed, panels, thresholds, QC rules)
+results/        every table/CSV/parquet behind each figure and statistic
+figures/        main panels, composed Figure 1-6 files (figures/composed/)
+                and supplementary S1-S11
+manuscript/     submission manuscript, Supplementary Information, cover letter
+logs/           run logs of the pipeline
+requirements.txt
 ```
 
-All scripts log inputs/outputs/counts/runtime to `logs/`.
-## Current manuscript status
-- Analysis scripts: src/01-src/27 (01-07 Phase 1; 08-16 main analyses; 17-26 review-response enhancements; 27 panel residue-level verification)
-- Submission package (v1.2): manuscript/submission/ (manuscript.md, manuscript.docx, cover_letter.md)
-- Figures: 20 main + 9 supplementary, all regenerable via src/16_make_figures.py
+## Reproducing the analysis
+
+```bash
+pip install -r requirements.txt
+python src/01_download_data.py      # downloads public data (large)
+for s in src/0[2-9]_*.py src/1?_*.py src/2?_*.py src/3?_*.py src/4?_*.py; do python "$s"; done
+```
+
+`src/42_homology_standard.py` requires `pyhmmer` (HMMER3). The confirmatory
+analysis specification and GO/NO-GO thresholds are recorded in `config.yaml`,
+frozen before the reported runs (git history timestamps each version).
+
+## License
+
+MIT (see `LICENSE`). Third-party data remain subject to their original terms
+(ProteinGym Zenodo record; UniProt and ClinVar terms of use).

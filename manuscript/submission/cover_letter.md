@@ -36,17 +36,24 @@ models lose relative advantage in IDR, -0.043 vs +0.038), not along the
 confidence axis; (4) a DMS-trained biologically gated ensemble transfers to
 clinical variants without clinical-label retraining (median protein-level
 AUROC 0.899 vs 0.867 uniform on a strictly non-overlapping 788-protein
-set), while disagreement-as-uncertainty fails in clinical annotation -- a
-boundary condition we report explicitly. All negative results are
+set), while the disagreement-error association reverses in clinical
+annotation (two-family matched control: +0.027 in DMS, -0.47 clinically) --
+a boundary condition we report explicitly. The clinical non-overlap set is
+defined by standard HMMER3 phmmer homology search. A most-closely-related
+2026 Nature Communications study (Livesey & Marsh) asks why individual
+predictors disagree with experiments; our question is complementary --
+disagreement internal to the model ecosystem -- and the manuscript
+positions this difference explicitly (Section 3.0). All negative results are
 reported, and the shared-input confound between structural confidence and
-structure-conditioned model scores is analyzed with three partial controls
-and stated as the primary limitation.
+structure-conditioned model scores is analyzed with three partial controls,
+two external controls and a seven-configuration structure-subset
+sensitivity, and stated as the primary limitation.
 
 **Rigour.** Every figure has a machine-readable source table, statistical
 aggregation is protein-level with bootstrap inference, and all numbers are
 reproducible from public data and code (ProteinGym v1.3). A separate
 Supplementary Information file contains Figures S1-S11 (one per page) and
-Tables S1-S9; main-text Tables 1-4 are typeset in the manuscript and main
+Tables S1-S12; main-text Tables 1-4 are typeset in the manuscript and main
 Figures 1-6 appear on their own pages at the end of the manuscript file.
 
 The manuscript is original, has not been published or submitted elsewhere,
